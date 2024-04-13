@@ -15,6 +15,7 @@ using NuGet.Services.Entities;
 using NuGet.Versioning;
 using NuGetGallery;
 using VerifyGitHubVulnerabilities.Configuration;
+using PackageVulnerabilitySeverity = NuGet.Services.Entities.PackageVulnerabilitySeverity;
 
 namespace VerifyGitHubVulnerabilities.Verify
 {
@@ -307,14 +308,18 @@ namespace VerifyGitHubVulnerabilities.Verify
             {
                 if (!_packageMetadata.TryGetValue(packageId, out IEnumerable<IPackageSearchMetadata> metadata))
                 {
-                    metadata = (await (await _packageMetadataResource.Value).GetMetadataAsync(
-                        packageId,
-                        includePrerelease: true,
-                        includeUnlisted: false,
-                        sourceCacheContext: new SourceCacheContext(),
-                        log: NuGet.Common.NullLogger.Instance,
-                        token: CancellationToken.None)).ToList();
-                    _packageMetadata[packageId] = metadata;
+                    using (var cacheContext = new SourceCacheContext())
+                    {
+                        cacheContext.NoCache = true;
+                        metadata = (await (await _packageMetadataResource.Value).GetMetadataAsync(
+                            packageId,
+                            includePrerelease: true,
+                            includeUnlisted: true,
+                            sourceCacheContext: cacheContext,
+                            log: NuGet.Common.NullLogger.Instance,
+                            token: CancellationToken.None)).ToList();
+                        _packageMetadata[packageId] = metadata;
+                    }
                 }
 
                 return metadata;

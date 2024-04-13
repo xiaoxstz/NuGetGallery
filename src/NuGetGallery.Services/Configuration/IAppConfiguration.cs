@@ -264,9 +264,9 @@ namespace NuGetGallery.Configuration
         string EnforcedAuthProviderForAdmin { get; set; }
 
         /// <summary>
-        /// Gets a string indicating which AAD Tenant Id should be used for administrators. 
+        /// Gets a string indicating which Microsoft Entra tenant ID should be used for administrators. 
         /// When specified, the gallery will ensure admin users are logging in using only the specified tenant ID.
-        /// Blank means any AAD tenant ID can be used by administrators.
+        /// Blank means any Microsoft Entra tenant ID can be used by administrators.
         /// </summary>
         string EnforcedTenantIdForAdmin { get; set; }
 
@@ -515,5 +515,11 @@ namespace NuGetGallery.Configuration
         /// account should not have any credentials or be marked as a site admin.
         /// </summary>
         string AdminSenderUser { get; set; }
+
+        /// <summary>
+        /// The maximum size of JSON that can be returned by a JSON endpoint. This overrides the default 4 MB in
+        /// select places where large JSON response bodies are possible.
+        /// </summary>
+        int MaxJsonLengthOverride { get; set; }
     }
 }

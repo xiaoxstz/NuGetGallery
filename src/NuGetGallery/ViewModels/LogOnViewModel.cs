@@ -16,6 +16,7 @@ namespace NuGetGallery
         public RegisterViewModel Register { get; set; }
         public IList<AuthenticationProviderViewModel> Providers { get; set; }
         public bool IsNuGetAccountPasswordLoginEnabled { get; set; }
+        public bool IsEmailOnExceptionList { get; set; }
 
         public LogOnViewModel()
             : this(new SignInViewModel())
@@ -48,8 +49,8 @@ namespace NuGetGallery
     public class SignInViewModel
     {
         [Required]
-        [Display(Name = "Username or Email")]
-        [Hint("Enter your username or email address.")]
+        [Display(Name = "Email Address")]
+        [Hint("Enter your email address.")]
         public string UserNameOrEmail { get; set; }
 
         [Required]

@@ -30,10 +30,19 @@ namespace NuGetGallery
         public string FullVersion { get; set; }
         public PackageStatusSummary PackageStatusSummary { get; set; }
         public bool IsVulnerable { get; set; }
+        public bool IsDeprecated { get; set; }
 
         public bool IsCurrent(IPackageVersionModel current)
         {
             return current.Version == Version && current.Id == Id;
+        }
+
+        public bool ShowDetailsAndLinks
+        {
+            get
+            {
+                return (Listed || !Locked) && (!Deleted || !Locked);
+            }
         }
     }
 }

@@ -3,10 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Principal;
 using NuGet.Services.Entities;
-using NuGet.Versioning;
 using NuGetGallery;
 
 namespace NuGet.VerifyMicrosoftPackage.Fakes
@@ -103,6 +100,8 @@ namespace NuGet.VerifyMicrosoftPackage.Fakes
 
         public bool IsShowReportAbuseSafetyChangesEnabled() => throw new NotImplementedException();
 
+        public bool IsAllowAadContentSafetyReportsEnabled() => throw new NotImplementedException();
+
         public bool IsMarkdigMdRenderingEnabled() => throw new NotImplementedException();
 
         public bool IsMarkdigMdSyntaxHighlightEnabled() => throw new NotImplementedException();
@@ -126,5 +125,13 @@ namespace NuGet.VerifyMicrosoftPackage.Fakes
         public bool IsNuGetAccountPasswordLoginEnabled() => throw new NotImplementedException();
 
         public bool IsDisplayUploadWarningV2Enabled(User user) => throw new NotImplementedException();
+
+        public bool IsDisplayPackageReadmeWarningEnabled(User user) => throw new NotImplementedException();
+
+        public bool IsFrameworkFilteringEnabled(User user) => throw new NotImplementedException();
+
+        public bool IsDisplayTfmBadgesEnabled(User user) => throw new NotImplementedException();
+
+        public bool IsAdvancedFrameworkFilteringEnabled(User user) => throw new NotImplementedException();
     }
 }

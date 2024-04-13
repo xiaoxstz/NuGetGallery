@@ -68,8 +68,8 @@
       "Domains": []
     },
     "NuGetGallery.ManageDeprecationApi": {
-      "All": false,
-      "SiteAdmins": true,
+      "All": true,
+      "SiteAdmins": false,
       "Accounts": [],
       "Domains": []
     },
@@ -110,6 +110,36 @@
       "Domains": []
     },
     "NuGetGallery.DisplayUploadWarningV2": {
+      "All": true,
+      "SiteAdmins": false,
+      "Accounts": [],
+      "Domains": []
+    },
+    "NuGetGallery.AdvancedSearch": {
+      "All": true,
+      "SiteAdmins": false,
+      "Accounts": [],
+      "Domains": []
+    },
+    "NuGetGallery.FrameworkFiltering": {
+      "All": true,
+      "SiteAdmins": false,
+      "Accounts": [],
+      "Domains": []
+    },
+    "NuGetGallery.DisplayPackageReadmeWarning": {
+      "All": true,
+      "SiteAdmins": false,
+      "Accounts": [],
+      "Domains": []
+    },
+    "NuGetGallery.DisplayTfmBadges": {
+      "All": true,
+      "SiteAdmins": false,
+      "Accounts": [],
+      "Domains": []
+    },
+    "NuGetGallery.AdvancedFrameworkFiltering": {
       "All": true,
       "SiteAdmins": false,
       "Accounts": [],

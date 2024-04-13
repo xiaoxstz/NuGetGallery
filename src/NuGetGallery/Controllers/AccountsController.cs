@@ -8,12 +8,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
 using NuGet.Services.Entities;
 using NuGet.Services.Messaging.Email;
 using NuGetGallery.Areas.Admin.ViewModels;
 using NuGetGallery.Authentication;
 using NuGetGallery.Filters;
+using NuGetGallery.Frameworks;
 using NuGetGallery.Helpers;
 using NuGetGallery.Infrastructure.Mail.Messages;
 using NuGetGallery.Security;
@@ -74,7 +74,8 @@ namespace NuGetGallery
             IDeleteAccountService deleteAccountService,
             IIconUrlProvider iconUrlProvider,
             IGravatarProxyService gravatarProxy,
-            IFeatureFlagService featureFlagService)
+            IFeatureFlagService featureFlagService,
+            IPackageFrameworkCompatibilityFactory frameworkCompatibilityFactory)
         {
             AuthenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
             PackageService = packageService ?? throw new ArgumentNullException(nameof(packageService));
@@ -90,7 +91,7 @@ namespace NuGetGallery
             GravatarProxy = gravatarProxy ?? throw new ArgumentNullException(nameof(gravatarProxy));
             FeatureFlagService = featureFlagService ?? throw new ArgumentNullException(nameof(featureFlagService));
 
-            _deleteAccountListPackageItemViewModelFactory = new DeleteAccountListPackageItemViewModelFactory(PackageService, IconUrlProvider);
+            _deleteAccountListPackageItemViewModelFactory = new DeleteAccountListPackageItemViewModelFactory(PackageService, IconUrlProvider, frameworkCompatibilityFactory, featureFlagService);
         }
 
         public abstract string AccountAction { get; }

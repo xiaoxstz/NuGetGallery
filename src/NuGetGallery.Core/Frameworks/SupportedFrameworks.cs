@@ -24,6 +24,7 @@ namespace NuGetGallery.Frameworks
         public static readonly NuGetFramework MonoAndroid = new NuGetFramework(FrameworkIdentifiers.MonoAndroid, EmptyVersion);
         public static readonly NuGetFramework MonoTouch = new NuGetFramework(FrameworkIdentifiers.MonoTouch, EmptyVersion);
         public static readonly NuGetFramework MonoMac = new NuGetFramework(FrameworkIdentifiers.MonoMac, EmptyVersion);
+        public static readonly NuGetFramework Net3 = new NuGetFramework(FrameworkIdentifiers.Net, new Version(3, 0, 0, 0));
         public static readonly NuGetFramework Net48 = new NuGetFramework(FrameworkIdentifiers.Net, new Version(4, 8, 0, 0));
         public static readonly NuGetFramework Net481 = new NuGetFramework(FrameworkIdentifiers.Net, new Version(4, 8, 1, 0));
         public static readonly NuGetFramework Net50Windows = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version5, "windows", EmptyVersion);
@@ -31,16 +32,21 @@ namespace NuGetGallery.Frameworks
         public static readonly NuGetFramework Net60Ios = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "ios", EmptyVersion);
         public static readonly NuGetFramework Net60MacOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "macos", EmptyVersion);
         public static readonly NuGetFramework Net60MacCatalyst = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "maccatalyst", EmptyVersion);
-        public static readonly NuGetFramework Net60Tizen = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "tizen", EmptyVersion);
         public static readonly NuGetFramework Net60TvOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "tvos", EmptyVersion);
         public static readonly NuGetFramework Net60Windows = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version6, "windows", EmptyVersion);
         public static readonly NuGetFramework Net70Android = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "android", EmptyVersion);
         public static readonly NuGetFramework Net70Ios = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "ios", EmptyVersion);
         public static readonly NuGetFramework Net70MacOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "macos", EmptyVersion);
         public static readonly NuGetFramework Net70MacCatalyst = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "maccatalyst", EmptyVersion);
-        public static readonly NuGetFramework Net70Tizen = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "tizen", EmptyVersion);
         public static readonly NuGetFramework Net70TvOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "tvos", EmptyVersion);
         public static readonly NuGetFramework Net70Windows = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version7, "windows", EmptyVersion);
+        public static readonly NuGetFramework Net80Android = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "android", EmptyVersion);
+        public static readonly NuGetFramework Net80Browser = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "browser", EmptyVersion);
+        public static readonly NuGetFramework Net80Ios = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "ios", EmptyVersion);
+        public static readonly NuGetFramework Net80MacOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "macos", EmptyVersion);
+        public static readonly NuGetFramework Net80MacCatalyst = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "maccatalyst", EmptyVersion);
+        public static readonly NuGetFramework Net80TvOs = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "tvos", EmptyVersion);
+        public static readonly NuGetFramework Net80Windows = new NuGetFramework(FrameworkIdentifiers.NetCoreApp, Version8, "windows", EmptyVersion);
         public static readonly NuGetFramework NetCore = new NuGetFramework(FrameworkIdentifiers.NetCore, EmptyVersion);
         public static readonly NuGetFramework NetMf = new NuGetFramework(FrameworkIdentifiers.NetMicro, EmptyVersion);
         public static readonly NuGetFramework UAP = new NuGetFramework(FrameworkIdentifiers.UAP, EmptyVersion);
@@ -62,6 +68,7 @@ namespace NuGetGallery.Frameworks
                 Net50, Net50Windows,
                 Net60, Net60Android, Net60Ios, Net60MacCatalyst, Net60MacOs, Net60TvOs, Net60Windows,
                 Net70, Net70Android, Net70Ios, Net70MacCatalyst, Net70MacOs, Net70TvOs, Net70Windows,
+                Net80, Net80Android, Net80Ios, Net80MacCatalyst, Net80MacOs, Net80TvOs, Net80Windows, Net80Browser,
                 NetCore, NetCore45, NetCore451,
                 NetCoreApp10, NetCoreApp11, NetCoreApp20, NetCoreApp21, NetCoreApp22, NetCoreApp30, NetCoreApp31,
                 NetMf,
@@ -71,6 +78,62 @@ namespace NuGetGallery.Frameworks
                 UAP, UAP10,
                 WP, WP7, WP75, WP8, WP81, WPA81,
                 XamarinIOs, XamarinMac, XamarinTvOs, XamarinWatchOs
+            };
+        }
+
+        /// <summary>
+        /// Lists of TFMs that users can filter packages by (for each Framework Generation) on NuGet.org search
+        /// </summary>
+        public static class TfmFilters {
+            public static readonly List<NuGetFramework> NetTfms = new List<NuGetFramework>
+            {
+                Net80,
+                Net70,
+                Net60,
+                Net50
+            };
+
+            public static readonly List<NuGetFramework> NetCoreAppTfms = new List<NuGetFramework>
+            {
+                NetCoreApp31,
+                NetCoreApp30,
+                NetCoreApp22,
+                NetCoreApp21,
+                NetCoreApp20,
+                NetCoreApp11,
+                NetCoreApp10
+            };
+
+            public static readonly List<NuGetFramework> NetStandardTfms = new List<NuGetFramework>
+            {
+                NetStandard21,
+                NetStandard20,
+                NetStandard16,
+                NetStandard15,
+                NetStandard14,
+                NetStandard13,
+                NetStandard12,
+                NetStandard11,
+                NetStandard10
+            };
+
+            public static readonly List<NuGetFramework> NetFrameworkTfms = new List<NuGetFramework>
+            {
+                Net481,
+                Net48,
+                Net472,
+                Net471,
+                Net47,
+                Net462,
+                Net461,
+                Net46,
+                Net452,
+                Net451,
+                Net45,
+                Net4,
+                Net35,
+                Net3,
+                Net2
             };
         }
     }

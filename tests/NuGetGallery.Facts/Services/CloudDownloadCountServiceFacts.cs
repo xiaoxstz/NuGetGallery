@@ -10,8 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
-using NuGetGallery.Services;
 using Xunit;
 
 namespace NuGetGallery
@@ -173,7 +173,10 @@ namespace NuGetGallery
             private readonly BaseFacts _baseFacts;
 
             public TestableCloudDownloadCountService(BaseFacts baseFacts)
-                    : base(baseFacts._telemetryService.Object, () => baseFacts._cloudBlobClientMock.Object)
+                    : base(
+                          baseFacts._telemetryService.Object,
+                          () => baseFacts._cloudBlobClientMock.Object,
+                          Mock.Of<ILogger<CloudDownloadCountService>>())
             {
                 _baseFacts = baseFacts;
             }

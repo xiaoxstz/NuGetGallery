@@ -188,7 +188,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User &apos;{0}&apos; has not linked their account to an AAD credential matching this organization..
+        ///   Looks up a localized string similar to User &apos;{0}&apos; has not linked their account to a Microsoft Entra ID credential matching this organization..
         /// </summary>
         public static string AddMember_UserDoesNotMeetOrganizationPolicy {
             get {
@@ -533,7 +533,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Azure Active Directory account.
+        ///   Looks up a localized string similar to Microsoft Entra ID account.
         /// </summary>
         public static string AzureActiveDirectory_AccountNoun {
             get {
@@ -542,7 +542,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Register with Azure Active Directory.
+        ///   Looks up a localized string similar to Register with Microsoft Entra ID.
         /// </summary>
         public static string AzureActiveDirectory_RegisterMessage {
             get {
@@ -551,7 +551,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign in with Azure Active Directory.
+        ///   Looks up a localized string similar to Sign in with Microsoft Entra ID.
         /// </summary>
         public static string AzureActiveDirectory_SignInMessage {
             get {
@@ -957,6 +957,24 @@ namespace NuGetGallery {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your API Key &apos;{0}&apos; has been revoked. If you did not request this change, please reply to this email to contact support..
+        /// </summary>
+        public static string Emails_ApiKeyRevoked_Body {
+            get {
+                return ResourceManager.GetString("Emails_ApiKeyRevoked_Body", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] API Key &apos;{1}&apos; Revoked.
+        /// </summary>
+        public static string Emails_ApiKeyRevoked_Subject {
+            get {
+                return ResourceManager.GetString("Emails_ApiKeyRevoked_Subject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A {0} was added to your account and can now be used to sign in. If you did not request this change, please reply to this email to contact support..
         /// </summary>
         public static string Emails_CredentialAdded_Body {
@@ -1103,6 +1121,15 @@ namespace NuGetGallery {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters packages based on the target frameworks they are compatible with. Click here to learn more..
+        /// </summary>
+        public static string FrameworkFilters_Tooltip {
+            get {
+                return ResourceManager.GetString("FrameworkFilters_Tooltip", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to The API key &apos;{0}&apos; is invalid..
         /// </summary>
         public static string InvalidApiKey {
@@ -1117,6 +1144,15 @@ namespace NuGetGallery {
         public static string InvalidOrExpiredPasswordResetToken {
             get {
                 return ResourceManager.GetString("InvalidOrExpiredPasswordResetToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package is invalid and cannot be uploaded. The package entry for &apos;{0}&apos; is not valid..
+        /// </summary>
+        public static string InvalidPackageEntry {
+            get {
+                return ResourceManager.GetString("InvalidPackageEntry", resourceCulture);
             }
         }
         
@@ -1409,7 +1445,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Administrator account &apos;{0}&apos; is not linked to an AAD credential with an organization tenant..
+        ///   Looks up a localized string similar to Administrator account &apos;{0}&apos; is not linked to a Microsoft Entra ID credential with an organization tenant..
         /// </summary>
         public static string Organizations_AdminAccountDoesNotHaveTenant {
             get {
@@ -1454,11 +1490,29 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The package is invalid and cannot be uploaded. One or more files, such as &apos;{0}&apos; have a date in the future..
+        ///   Looks up a localized string similar to The package is invalid and cannot be published. One or more files, such as &apos;{0}&apos; have a date in the future..
         /// </summary>
         public static string PackageEntryFromTheFuture {
             get {
                 return ResourceManager.GetString("PackageEntryFromTheFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package is invalid and cannot be published. The package entry for &apos;{0}&apos; has a  double back slashes in path..
+        /// </summary>
+        public static string PackageEntryWithDoubleBackSlash {
+            get {
+                return ResourceManager.GetString("PackageEntryWithDoubleBackSlash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package is invalid and cannot be published. The package entry for &apos;{0}&apos; has a  double forward slashes in path, which is causing a file name collision during extraction..
+        /// </summary>
+        public static string PackageEntryWithDoubleForwardSlash {
+            get {
+                return ResourceManager.GetString("PackageEntryWithDoubleForwardSlash", resourceCulture);
             }
         }
         
@@ -2049,7 +2103,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not published a package with this prefix in the past. This means other users may be able to push packages starting with the same prefix. Contact account@nuget.org to reserve the prefix. Go to https://docs.microsoft.com/en-us/nuget/reference/id-prefix-reservation to learn more about Package ID prefix reservation..
+        ///   Looks up a localized string similar to You have not published a package with this prefix in the past. This means other users may be able to push packages starting with the same prefix. Contact account@nuget.org to reserve the prefix. Go to https://docs.microsoft.com/nuget/reference/id-prefix-reservation to learn more about Package ID prefix reservation..
         /// </summary>
         public static string SecurityPolicy_RequirePackagePrefixReserved {
             get {
@@ -2108,6 +2162,33 @@ namespace NuGetGallery {
         public static string SuccessfullyUploadedPackage {
             get {
                 return ResourceManager.GetString("SuccessfullyUploadedPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This package targets {0}. The package is compatible with this framework or higher..
+        /// </summary>
+        public static string SupportedFrameworks_Asset_Tooltip {
+            get {
+                return ResourceManager.GetString("SupportedFrameworks_Asset_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This package is compatible with {0} or higher..
+        /// </summary>
+        public static string SupportedFrameworks_Computed_Tooltip {
+            get {
+                return ResourceManager.GetString("SupportedFrameworks_Computed_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This package is compatible with all versions of {0}..
+        /// </summary>
+        public static string SupportedFrameworks_EmptyVersion_Template_Tooltip {
+            get {
+                return ResourceManager.GetString("SupportedFrameworks_EmptyVersion_Template_Tooltip", resourceCulture);
             }
         }
         
@@ -2589,7 +2670,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This package ID has been reserved. Please request access to upload to this reserved namespace from the owner of the reserved prefix, or re-upload the package with a different ID. Go to https://docs.microsoft.com/en-us/nuget/reference/id-prefix-reservation learn more about Package ID prefix reservation..
+        ///   Looks up a localized string similar to This package ID has been reserved. Please request access to upload to this reserved namespace from the owner of the reserved prefix, or re-upload the package with a different ID. Go to https://docs.microsoft.com/nuget/reference/id-prefix-reservation learn more about Package ID prefix reservation..
         /// </summary>
         public static string UploadPackage_IdNamespaceConflict {
             get {
@@ -2598,7 +2679,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This package ID has been reserved. Please request access to upload to this reserved namespace from the owner of the reserved prefix, or re-upload the package with a different ID. &lt;a href=&quot;https://docs.microsoft.com/en-us/nuget/reference/id-prefix-reservation&quot;&gt;Learn more about Package ID prefix reservation&lt;/a&gt;..
+        ///   Looks up a localized string similar to This package ID has been reserved. Please request access to upload to this reserved namespace from the owner of the reserved prefix, or re-upload the package with a different ID. &lt;a href=&quot;https://docs.microsoft.com/nuget/reference/id-prefix-reservation&quot;&gt;Learn more about Package ID prefix reservation&lt;/a&gt;..
         /// </summary>
         public static string UploadPackage_IdNamespaceConflictHtml {
             get {
@@ -2832,7 +2913,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Readme missing. Go to https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices#readme learn How to include a readme file within the package..
+        ///   Looks up a localized string similar to Readme missing. Go to https://aka.ms/nuget-include-readme learn How to include a readme file within the package..
         /// </summary>
         public static string UploadPackage_MissingReadme {
             get {
@@ -2841,7 +2922,7 @@ namespace NuGetGallery {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;strong&gt;Readme&lt;/strong&gt; missing.&lt;a href=&quot;https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices#readme&quot;&gt; See how to include a readme file within the package&lt;/a&gt;, or add it as you upload..
+        ///   Looks up a localized string similar to &lt;strong&gt;Readme&lt;/strong&gt; missing.&lt;a href=&quot;https://aka.ms/nuget-include-readme&quot;&gt; See how to include a readme file within the package&lt;/a&gt;, or add it as you upload..
         /// </summary>
         public static string UploadPackage_MissingReadmeHtml {
             get {

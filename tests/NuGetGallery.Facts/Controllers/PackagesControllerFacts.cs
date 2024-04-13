@@ -261,7 +261,7 @@ namespace NuGetGallery
             {
                 compatibilityFactory = new Mock<IPackageFrameworkCompatibilityFactory>();
                 compatibilityFactory
-                    .Setup(x => x.Create(It.IsAny<ICollection<PackageFramework>>()))
+                    .Setup(x => x.Create(It.IsAny<ICollection<PackageFramework>>(), string.Empty, string.Empty, false))
                     .Returns(new PackageFrameworkCompatibility());
             }
 
@@ -508,7 +508,10 @@ namespace NuGetGallery
 
                 var packages = new List<Package> { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterExactPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<string>()))
@@ -713,7 +716,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -840,7 +846,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -911,7 +920,10 @@ namespace NuGetGallery
                 };
 
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(new[] { notLatestPackage, latestPackage, latestButNotPackage });
 
                 indexingService.Setup(i => i.GetLastWriteTime()).Returns(Task.FromResult((DateTime?)DateTime.UtcNow));
@@ -956,7 +968,10 @@ namespace NuGetGallery
 
                 var packages = new[] { notLatestPackage };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1002,7 +1017,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById("Foo", /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById("Foo",
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1101,7 +1119,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1148,7 +1169,11 @@ namespace NuGetGallery
                 };
 
                 var packages = new[] { package };
-                packageService.Setup(p => p.FindPackagesById("Foo", /*includePackageRegistration:*/ true))
+                packageService
+                    .Setup(p => p.FindPackagesById("Foo",
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService.Setup(p => p.FilterLatestPackage(packages, SemVerLevelKey.SemVer2, true))
@@ -1204,7 +1229,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1256,7 +1284,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1315,7 +1346,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1389,7 +1423,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1421,10 +1458,10 @@ namespace NuGetGallery
             [InlineData(PackageDeprecationStatus.NotDeprecated, PackageDeprecationStatus.NotDeprecated, "")]
             [InlineData(PackageDeprecationStatus.CriticalBugs, PackageDeprecationStatus.NotDeprecated, 
                 "{0} is deprecated because it has critical bugs.")]
-            [InlineData(PackageDeprecationStatus.Legacy, PackageDeprecationStatus.NotDeprecated, 
-                "{0} is deprecated because it's legacy and no longer maintained.")]
+            [InlineData(PackageDeprecationStatus.Legacy, PackageDeprecationStatus.NotDeprecated,
+                "{0} is deprecated because it is no longer maintained.")]
             [InlineData(PackageDeprecationStatus.Legacy, PackageDeprecationStatus.CriticalBugs, 
-                "{0} is deprecated because it's legacy and has critical bugs.")]
+                "{0} is deprecated because it is no longer maintained and has critical bugs.")]
             [InlineData(PackageDeprecationStatus.Other, PackageDeprecationStatus.NotDeprecated, "{0} is deprecated.")]
             public async Task ShowsCorrectDeprecationIconTitle(
                 PackageDeprecationStatus deprecationStatus,
@@ -1482,7 +1519,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1514,9 +1554,9 @@ namespace NuGetGallery
 
             [Theory]
             [InlineData(false, false, "")]
-            [InlineData(true, false, "{0} is deprecated because it's legacy and no longer maintained.")]
+            [InlineData(true, false, "{0} is deprecated because it is no longer maintained.")]
             [InlineData(false, true, "{0} has at least one vulnerability with {1} severity.")]
-            [InlineData(true, true, "{0} is deprecated because it's legacy and no longer maintained; {0} has at least one vulnerability with {1} severity.")]
+            [InlineData(true, true, "{0} is deprecated because it is no longer maintained; {0} has at least one vulnerability with {1} severity.")]
             public async Task ShowsCombinedDeprecationAndVulnerabilitiesIconTitle(
                 bool isDeprecationEnabled,
                 bool isVulnerabilitiesEnabled,
@@ -1588,7 +1628,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1671,7 +1714,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1738,7 +1784,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1796,7 +1845,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -1844,7 +1896,10 @@ namespace NuGetGallery
                     .Setup(f => f.IsPackageDependentsEnabled(It.IsAny<User>()))
                     .Returns(false);
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
@@ -1893,7 +1948,10 @@ namespace NuGetGallery
                    .Returns(false);
                 var packages = new List<Package> { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
@@ -1947,8 +2005,12 @@ namespace NuGetGallery
 
                 var packages = new List<Package> { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
+
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
                     .Returns(package);
@@ -2003,7 +2065,10 @@ namespace NuGetGallery
                 var gitHubInformation = new NuGetPackageGitHubInformation(new List<RepositoryInformation>());
 
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
@@ -2067,7 +2132,10 @@ namespace NuGetGallery
                 var gitHubInformation = new NuGetPackageGitHubInformation(new List<RepositoryInformation>());
 
                 packageService
-                    .Setup(p => p.FindPackagesById(It.IsAny<string>(), /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(It.IsAny<string>(),
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
@@ -2133,7 +2201,10 @@ namespace NuGetGallery
                 var gitHubInformation = new NuGetPackageGitHubInformation(new List<RepositoryInformation>());
 
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
                 packageService
                     .Setup(p => p.FilterLatestPackage(It.IsAny<IReadOnlyCollection<Package>>(), It.IsAny<int?>(), true))
@@ -2169,6 +2240,7 @@ namespace NuGetGallery
                 controller.SetCurrentUser(TestUtility.FakeUser);
 
                 var id = "Foo";
+                var version = "1.0.0";
                 var packageFramework = new PackageFramework { TargetFramework = "net5.0" };
                 var supportedFrameworks = new HashSet<PackageFramework> { packageFramework };
                 var package = new Package()
@@ -2186,7 +2258,10 @@ namespace NuGetGallery
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -2202,7 +2277,7 @@ namespace NuGetGallery
                     .Returns(false);
 
                 compatibilityFactory
-                    .Setup(x => x.Create(supportedFrameworks))
+                    .Setup(x => x.Create(supportedFrameworks, id, version, false))
                     .Returns(new PackageFrameworkCompatibility());
 
                 // Arrange and Act
@@ -2210,7 +2285,6 @@ namespace NuGetGallery
 
                 // Assert
                 var model = ResultAssert.IsView<DisplayPackageViewModel>(result);
-                compatibilityFactory.Verify(x => x.Create(It.IsAny<ICollection<PackageFramework>>()), Times.Never());
                 Assert.Null(model.PackageFrameworkCompatibility);
             }
 
@@ -2231,6 +2305,7 @@ namespace NuGetGallery
                 controller.SetCurrentUser(TestUtility.FakeUser);
 
                 var id = "Foo";
+                var version = "1.1.1";
                 var packageFramework = new PackageFramework { TargetFramework = "net5.0" };
                 var supportedFrameworks = new HashSet<PackageFramework> { packageFramework };
                 var package = new Package()
@@ -2241,14 +2316,17 @@ namespace NuGetGallery
                         Owners = new List<User>()
                     },
                     SupportedFrameworks = supportedFrameworks,
-                    Version = "1.1.1",
-                    NormalizedVersion = "1.1.1",
+                    Version = version,
+                    NormalizedVersion = version,
                     Title = "A test package!"
                 };
 
                 var packages = new[] { package };
                 packageService
-                    .Setup(p => p.FindPackagesById(id, /*includePackageRegistration:*/ true))
+                    .Setup(p => p.FindPackagesById(id,
+                    /*includePackageRegistration:*/ true,
+                    /*includeDeprecations:*/ true,
+                    /*includeSupportedFrameworks:*/ true))
                     .Returns(packages);
 
                 packageService
@@ -2264,15 +2342,14 @@ namespace NuGetGallery
                     .Returns(displayFlag);
 
                 compatibilityFactory
-                    .Setup(x => x.Create(supportedFrameworks))
+                    .Setup(x => x.Create(supportedFrameworks, id, version, false))
                     .Returns(new PackageFrameworkCompatibility());
 
                 // Arrange and Act
-                var result = await controller.DisplayPackage(id, version: null);
+                var result = await controller.DisplayPackage(id, version);
 
                 // Assert
                 var model = ResultAssert.IsView<DisplayPackageViewModel>(result);
-                compatibilityFactory.Verify(x => x.Create(supportedFrameworks), Times.Once());
                 Assert.NotNull(model.PackageFrameworkCompatibility);
             }
 
@@ -5387,11 +5464,239 @@ namespace NuGetGallery
                 }
             }
 
+            public static IEnumerable<object[]> Credential_Data
+            {
+                get
+                {
+                    // Format:
+                    // 1. bool - true -> expecting to see safety categories
+                    // 2. First array is direct credentials (owners)
+                    // 3. Second array is an array of indirect credentials through owner organization members (first array contains credentials of the org itself)
+
+                    yield return new object[]
+                    {
+                        true, // no owners, we still want to enable safety reporting
+                        null,
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        true,
+                        new object[]
+                        { // owners
+                            new object[] { "external.MicrosoftAccount" }
+                        },
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] { "external.AzureActiveDirectory" }
+                        },
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] { "external.AzureActiveDirectory" },
+                            new object[] { "external.MicrosoftAccount", "apikey.v1" }
+                        },
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] { "external.AzureActiveDirectory", "external.MicrosoftAccount" }
+                        },
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] { "external.MicrosoftAccount" },
+                            new object[] { "external.AzureActiveDirectory", "apikey.v4" },
+                            new object[] { "external.MicrosoftAccount", "apikey.v4" }
+                        },
+                        null
+                    };
+
+                    yield return new object[]
+                    {
+                        true,
+                        new object[]
+                        { // owners
+                            new object [] { "external.MicrosoftAccount" }
+                        },
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object [] { "external.MicrosoftAccount" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        true,
+                        null,
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" },
+                                new object[] { "external.MicrosoftAccount" },
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount", "apikey.v4", "apikey.v4" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        null,
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] {  "external.MicrosoftAccount", "apikey.v4", "apikey.v4" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" }, // org credentials
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" },
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" },
+                                new object[] { "external.AzureActiveDirectory" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        true,
+                        new object[]
+                        { // owners
+                            new object[] {"external.MicrosoftAccount", "apikey.v4" }
+                        },
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" },
+                                new object[] { "apikey.v4", "external.MicrosoftAccount", "apikey.v4" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] {"external.MicrosoftAccount", "apikey.v4" }
+                        },
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "apikey.v1", "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" },
+                                new object[] { "external.AzureActiveDirectory", "apikey.v4" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] {"external.MicrosoftAccount", "apikey.v4" }
+                        },
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[]
+                            { // members
+                                new object[] { "external.AzureActiveDirectory", "apikey.v4" }, // org credentials
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" },
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" }
+                            }
+                        },
+                    };
+
+                    yield return new object[]
+                    {
+                        false,
+                        new object[]
+                        { // owners
+                            new object[] {"external.MicrosoftAccount", "apikey.v4" }
+                        },
+                        new object[]
+                        { // owner orgs
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount" }
+                            },
+                            new object[] { }, // allow for corner case where an org has no members
+                            new object[]
+                            { // members
+                                new object[] { "external.MicrosoftAccount" }, // org credentials
+                                new object[] { "external.MicrosoftAccount", "apikey.v4" },
+                                new object[] { "external.AzureActiveDirectory", "apikey.v4" }
+                            }
+                        },
+                    };
+                }
+            }
+
             [Theory]
             [MemberData(nameof(NotOwner_Data))]
             public void ShowsFormWhenNotOwner(User currentUser, User owner)
             {
-                var result = GetReportAbuseResult(currentUser, owner, out var package);
+                var result = GetReportAbuseResult(currentUser, owner);
 
                 Assert.IsType<ViewResult>(result);
                 var viewResult = result as ViewResult;
@@ -5419,7 +5724,7 @@ namespace NuGetGallery
                     }
                 };
 
-                var result = GetReportAbuseResultInternal(currentUser, owner, package);
+                var result = GetReportAbuseResult(currentUser, package);
                 Assert.IsType<ViewResult>(result);
                 var viewResult = result as ViewResult;
 
@@ -5435,25 +5740,116 @@ namespace NuGetGallery
             [MemberData(nameof(Owner_Data))]
             public void RedirectsToReportMyPackageWhenOwner(User currentUser, User owner)
             {
-                var result = GetReportAbuseResult(currentUser, owner, out var package);
+                var result = GetReportAbuseResult(currentUser, owner);
 
                 Assert.IsType<RedirectToRouteResult>(result);
                 var redirectResult = result as RedirectToRouteResult;
                 Assert.Equal("ReportMyPackage", redirectResult.RouteValues["Action"]);
             }
 
-            public ActionResult GetReportAbuseResult(User currentUser, User owner, out Package package)
+            [Theory]
+            [MemberData(nameof(Credential_Data))]
+            public void IncludesSafetyCategoriesWhenNotAadPresent(bool expectingSafetyCategories, object[] directOwnerCredentials, object[] indirectOwnerCredentials) 
             {
-                package = new Package
+                // Arrange
+                List<User> owners = new List<User>();
+
+                // -- Direct owners
+                if (directOwnerCredentials != null)
+                {
+                    foreach(var ownerCredentialTypes in directOwnerCredentials)
+                    {
+                        owners.Add(new User
+                        {
+                            Credentials = ((object[])ownerCredentialTypes).Select(ct => new Credential { Type = (string)ct }).ToList()
+                        });
+                    }
+                }
+
+                // -- Organization owners
+                if (indirectOwnerCredentials != null)
+                {
+                    foreach (var ownerMembers in indirectOwnerCredentials)
+                    {
+                        var organization = new Organization
+                        {
+                            Members = new List<Membership>()
+                        };
+
+                        var orgCredentialsDone = false;
+                        foreach(var memberCredentialTypes in (object[])ownerMembers)
+                        {
+                            // the first array in an organization object contains the credentials of the org itself
+                            if (!orgCredentialsDone)
+                            {
+                                organization.Credentials = ((object[])memberCredentialTypes).Select(ct => new Credential { Type = (string)ct }).ToList();
+                                orgCredentialsDone = true;
+                            }
+                            else
+                            {
+                                var membership = new Membership
+                                {
+                                    Organization = organization
+                                };
+
+                                var member = new User
+                                {
+                                    Credentials = ((object[])memberCredentialTypes).Select(ct => new Credential { Type = (string)ct }).ToList(),
+                                    Organizations = new List<Membership> { membership }
+                                };
+
+                                membership.Member = member;
+                                organization.Members.Add(membership);
+                            }
+                        }
+
+                        owners.Add(organization);
+                    }
+                }
+
+                var package = new Package
+                {
+                    PackageRegistration = new PackageRegistration { Id = PackageId, Owners = owners },
+                    Version = PackageVersion
+                };
+
+                var featureFlagService = new Mock<IFeatureFlagService>();
+                featureFlagService.Setup(ff => ff.IsShowReportAbuseSafetyChangesEnabled()).Returns(true);
+                featureFlagService.Setup(ff => ff.IsAllowAadContentSafetyReportsEnabled()).Returns(false);
+
+                // Act
+                var result = GetReportAbuseResult(null, package, featureFlagService);
+
+                // Assert
+                Assert.IsType<ViewResult>(result);
+                var viewResult = result as ViewResult;
+
+                Assert.IsType<ReportAbuseViewModel>(viewResult.Model);
+                var model = viewResult.Model as ReportAbuseViewModel;
+
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.ChildSexualExploitationOrAbuse));
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.TerrorismOrViolentExtremism));
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.ImminentHarm));
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.HateSpeech));
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.RevengePorn));
+                Assert.Equal(expectingSafetyCategories, model.ReasonChoices.Contains(ReportPackageReason.OtherNudityOrPornography));
+            }
+
+            private ActionResult GetReportAbuseResult(User currentUser, User owner)
+            {
+                var package = new Package
                 {
                     PackageRegistration = new PackageRegistration { Id = PackageId, Owners = { owner } },
                     Version = PackageVersion
                 };
 
-                return GetReportAbuseResultInternal(currentUser, owner, package);
+                return GetReportAbuseResult(currentUser, package);
             }
 
-            private ActionResult GetReportAbuseResultInternal(User currentUser, User owner, Package package)
+            private ActionResult GetReportAbuseResult(User currentUser, Package package) =>
+                GetReportAbuseResult(currentUser, package, featureFlagService: null);
+
+            private ActionResult GetReportAbuseResult(User currentUser, Package package, Mock<IFeatureFlagService> featureFlagService)
             {
                 var packageService = new Mock<IPackageService>();
                 packageService.Setup(p => p.FindPackageByIdAndVersionStrict(PackageId, PackageVersion)).Returns(package);
@@ -5461,6 +5857,7 @@ namespace NuGetGallery
                 var controller = CreateController(
                     GetConfigurationService(),
                     packageService: packageService,
+                    featureFlagService: featureFlagService,
                     httpContext: httpContext);
                 controller.SetCurrentUser(currentUser);
                 TestUtility.SetupUrlHelper(controller, httpContext);
@@ -5479,11 +5876,36 @@ namespace NuGetGallery
                         It.Is<ReportAbuseMessage>(
                             r => r.Request.FromAddress.Address == ReporterEmailAddress
                                  && r.Request.Package == package
-                                 && r.Request.Reason == EnumHelper.GetDescription(ReportPackageReason.ViolatesALicenseIOwn)
+                                 && r.Request.Reason == EnumHelper.GetDescription(ReportPackageReason.ContainsMaliciousCode)
                                  && r.Request.Message == EncodedMessage
                                  && r.AlreadyContactedOwners),
                         false,
                         false));
+            }
+
+            [Theory]
+            [InlineData(ReportPackageReason.ViolatesALicenseIOwn, true)]
+            [InlineData(ReportPackageReason.ContainsSecurityVulnerability, true)]
+            [InlineData(ReportPackageReason.RevengePorn, true)]
+            [InlineData(ReportPackageReason.HasABugOrFailedToInstall, true)]
+            [InlineData(ReportPackageReason.ContainsMaliciousCode, false)]
+            [InlineData(ReportPackageReason.Other, false)]
+            [InlineData(ReportPackageReason.ChildSexualExploitationOrAbuse, false)]
+            [InlineData(ReportPackageReason.TerrorismOrViolentExtremism, false)]
+            [InlineData(ReportPackageReason.HateSpeech, false)]
+            [InlineData(ReportPackageReason.ImminentHarm, false)]
+            [InlineData(ReportPackageReason.OtherNudityOrPornography, false)]
+            public async Task FormRejectsDisallowedReportReasons(ReportPackageReason reason, bool shouldReject)
+            {
+                var result = await GetReportAbuseFormResult(null, Owner, out var package, out var messageService, reason);
+                if (shouldReject)
+                {
+                    Assert.IsType<HttpNotFoundResult>(result);
+                }
+                else
+                {
+                    Assert.IsNotType<HttpNotFoundResult>(result);
+                }
             }
 
             public static IEnumerable<object[]> FormSendsMessageToGalleryOwnerWithUserInfoWhenAuthenticated_Data
@@ -5517,13 +5939,13 @@ namespace NuGetGallery
                                  && r.Request.FromAddress.Address == currentUser.EmailAddress
                                  && r.Request.FromAddress.DisplayName == currentUser.Username
                                  && r.Request.Package == package
-                                 && r.Request.Reason == EnumHelper.GetDescription(ReportPackageReason.ViolatesALicenseIOwn)
+                                 && r.Request.Reason == EnumHelper.GetDescription(ReportPackageReason.ContainsMaliciousCode)
                                  && r.AlreadyContactedOwners),
                         false,
                         false));
             }
 
-            public Task<ActionResult> GetReportAbuseFormResult(User currentUser, User owner, out Package package, out Mock<IMessageService> messageService)
+            public Task<ActionResult> GetReportAbuseFormResult(User currentUser, User owner, out Package package, out Mock<IMessageService> messageService, ReportPackageReason reason = ReportPackageReason.ContainsMaliciousCode)
             {
                 messageService = new Mock<IMessageService>();
                 messageService.Setup(
@@ -5546,7 +5968,7 @@ namespace NuGetGallery
                 {
                     Email = ReporterEmailAddress,
                     Message = UnencodedMessage,
-                    Reason = ReportPackageReason.ViolatesALicenseIOwn,
+                    Reason = reason,
                     AlreadyContactedOwner = true,
                     Signature = Signature
                 };
@@ -6172,6 +6594,16 @@ namespace NuGetGallery
                     x => x.SendMessageAsync(It.IsAny<ReportMyPackageMessage>(), false, false),
                     Times.Once);
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources
+                    _controller?.Dispose();
+                    base.Dispose(disposing);
+                }
+            }
         }
 
         public class TheUploadFileActionForGetRequests
@@ -6595,6 +7027,45 @@ namespace NuGetGallery
                 
                 Assert.NotNull(result);
                 Assert.Equal("Central Directory corrupt.", (result.Data as JsonValidationMessage[])[0].PlainTextMessage);
+            }
+
+            [Theory]
+            [InlineData("PackageWithDoubleForwardSlash.1.0.0.nupkg")]
+            [InlineData("PackageWithDoubleBackwardSlash.1.0.0.nupkg")]
+            [InlineData("PackageWithVeryLongZipFileEntry.1.0.0.nupkg")]
+            [UseInvariantCultureAttribute]
+            public async Task WillRejectMalformedZipWithEntryDoubleSlashInPath(string zipPath)
+            {
+                // Arrange
+                var fakeUploadedFile = new Mock<HttpPostedFileBase>();
+                fakeUploadedFile.Setup(x => x.FileName).Returns("file.nupkg");
+                var fakeFileStream = new MemoryStream(TestDataResourceUtility.GetResourceBytes(zipPath));
+                fakeUploadedFile.Setup(x => x.InputStream).Returns(fakeFileStream);
+
+                var controller = CreateController(
+                    GetConfigurationService(),
+                    fakeNuGetPackage: fakeFileStream);
+                controller.SetCurrentUser(TestUtility.FakeUser);
+
+                var result = await controller.UploadPackage(fakeUploadedFile.Object) as JsonResult;
+
+                Assert.NotNull(result);
+
+                if (zipPath.Contains("Forward"))
+                {
+                    Assert.Equal(String.Format(Strings.PackageEntryWithDoubleForwardSlash, "malformedfile.txt"), (result.Data as JsonValidationMessage[])[0].PlainTextMessage);
+                }
+                else if (zipPath.Contains("Backward"))
+                {
+                    Assert.Equal(String.Format(Strings.PackageEntryWithDoubleBackSlash, "malformedfile.txt"), (result.Data as JsonValidationMessage[])[0].PlainTextMessage);
+                }
+                else
+                {
+                    string longFileName = "a".PadRight(270, 'a') + ".txt";
+                    Assert.Equal(String.Format(Strings.PackageEntryWithDoubleForwardSlash, longFileName), (result.Data as JsonValidationMessage[])[0].PlainTextMessage);
+                    string normalizedZipEntry = ZipArchiveHelpers.NormalizeForwardSlashesInPath(longFileName);
+                    Assert.Equal(260, normalizedZipEntry.Length);
+                }
             }
 
             [Theory]
@@ -7631,6 +8102,7 @@ namespace NuGetGallery
 
                     // Assert
                     fakeTelemetryService.Verify(x => x.TrackPackagePushFailureEvent(PackageId, new NuGetVersion(PackageVersion)), Times.Once());
+                    fakeTelemetryService.Verify(x => x.TrackPackagePushFailureEvent(null, null), Times.Never());
                 }
             }
 
@@ -8601,6 +9073,54 @@ namespace NuGetGallery
                 }
             }
 
+            /// <remarks>
+            /// There is a race condition between API and Web UI uploads where we can end up
+            /// in a situation where user may have "verify package page" open in their browser
+            /// pushes the same package with command line client, then clicks "Verify" in
+            /// the browser. Browser will report failure (as package already exists). That
+            /// failure must not be counted as "package push failure".
+            /// </remarks>
+            [Fact]
+            public async Task DoesNotReportPackagePushFailureOnDuplicatePackage()
+            {
+                // Arrange
+                var fakeUploadFileService = new Mock<IUploadFileService>();
+                using (var fakeFileStream = new MemoryStream())
+                {
+                    fakeUploadFileService.Setup(x => x.GetUploadFileAsync(TestUtility.FakeUser.Key)).Returns(Task.FromResult<Stream>(fakeFileStream));
+                    fakeUploadFileService.Setup(x => x.DeleteUploadFileAsync(TestUtility.FakeUser.Key)).Returns(Task.FromResult(0));
+                    var fakePackageUploadService = GetValidPackageUploadService(PackageId, PackageVersion);
+                    fakePackageUploadService
+                        .Setup(pus => pus.GeneratePackageAsync(
+                            It.IsAny<string>(),
+                            It.IsAny<PackageArchiveReader>(),
+                            It.IsAny<PackageStreamMetadata>(),
+                            It.IsAny<User>(),
+                            It.IsAny<User>()))
+                        .Throws(new PackageAlreadyExistsException());
+
+                    var fakeUserService = new Mock<IUserService>();
+                    fakeUserService.Setup(x => x.FindByUsername(TestUtility.FakeUser.Username, false)).Returns(TestUtility.FakeUser);
+
+                    var fakeTelemetryService = new Mock<ITelemetryService>();
+
+                    var controller = CreateController(
+                        GetConfigurationService(),
+                        packageUploadService: fakePackageUploadService,
+                        uploadFileService: fakeUploadFileService,
+                        userService: fakeUserService,
+                        telemetryService: fakeTelemetryService);
+                    controller.SetCurrentUser(TestUtility.FakeUser);
+
+                    // Act
+                    await Assert.ThrowsAsync<PackageAlreadyExistsException>(() => controller.VerifyPackage(new VerifyPackageRequest { Listed = true, Owner = TestUtility.FakeUser.Username }));
+
+                    // Assert
+                    fakeTelemetryService
+                        .Verify(ts => ts.TrackPackagePushFailureEvent(It.IsAny<string>(), It.IsAny<NuGetVersion>()), Times.Never);
+                }
+            }
+
             [Fact]
             public async Task WillNotCommitChangesToReadMeService()
             {
@@ -9406,6 +9926,16 @@ namespace NuGetGallery
                 // Assert
                 Assert.IsType<HttpNotFoundResult>(result);
             }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources
+                    _target?.Dispose();
+                    base.Dispose(disposing);
+                }
+            }
         }
 
         public class TheRevalidateSymbolsMethod : TestContainer
@@ -9549,6 +10079,16 @@ namespace NuGetGallery
                 // Assert
                 Assert.IsType<HttpStatusCodeResult>(result);
                 ResultAssert.IsStatusCode(result, HttpStatusCode.BadRequest);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources
+                    _target?.Dispose();
+                    base.Dispose(disposing);
+                }
             }
         }
 

@@ -44,6 +44,7 @@ namespace NuGetGallery
         public bool IsPackageDependentsEnabled { get; set; }
         public bool IsRecentPackagesNoIndexEnabled { get; set; }
         public bool IsMarkdigMdSyntaxHighlightEnabled { get; set; }
+        public bool CanDisplayReadmeWarning { get; set; }
         public NuGetPackageGitHubInformation GitHubDependenciesInformation { get; set; }
         public bool HasEmbeddedIcon { get; set; }
         public bool HasEmbeddedReadmeFile { get; set; }
@@ -155,14 +156,6 @@ namespace NuGetGallery
             get
             {
                 return !Listed || !Available || (IsRecentPackagesNoIndexEnabled && TotalDaysSinceCreated < NumberOfDaysToBlockIndexing);
-            }
-        }
-
-        public bool ShowDetailsAndLinks
-        {
-            get
-            {
-                return Listed || !Locked || !Owners.Any(x => x.IsLocked); 
             }
         }
 

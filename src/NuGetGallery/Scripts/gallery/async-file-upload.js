@@ -193,8 +193,8 @@
                     break;
                 case "error":
                     // IIS returns 404.13 (NotFound) when maxAllowedContentLength limit is exceeded.
-                    if (fullResponse === "Not Found") {
-                        displayErrors(["The package file exceeds the size limit. Please try again."]);
+                    if (fullResponse === "Not Found" || fullResponse === "Request Entity Too Large") {
+                        displayErrors(["The package file exceeds the size limit of 250 MB. Please reduce the package size and try again."]);
                     }
                     else {
                         displayErrors(model.responseJSON);
@@ -251,7 +251,6 @@
                 var reportContainerElement = document.createElement("div");
                 $(reportContainerElement).attr("id", "verify-package-block");
                 $(reportContainerElement).attr("class", "collapse in");
-                $(reportContainerElement).attr("aria-expanded", "true");
                 $(reportContainerElement).attr("data-bind", "template: { name: 'verify-metadata-template', data: data }");
                 $("#verify-package-container").append(reportContainerElement);
                 ko.applyBindings({ data: model }, reportContainerElement);
@@ -267,7 +266,6 @@
                 var submitContainerElement = document.createElement("div");
                 $(submitContainerElement).attr("id", "submit-block");
                 $(submitContainerElement).attr("class", "collapse in");
-                $(submitContainerElement).attr("aria-expanded", "true");
                 $(submitContainerElement).attr("data-bind", "template: { name: 'submit-package-template', data: data }");
                 $("#submit-package-container").append(submitContainerElement);
                 ko.applyBindings({ data: model }, submitContainerElement);

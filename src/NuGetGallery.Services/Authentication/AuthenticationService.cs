@@ -86,7 +86,7 @@ namespace NuGetGallery.Authentication
                 var user = FindByUserNameOrEmail(userNameOrEmail);
 
                 if (!_featureFlagService.IsNuGetAccountPasswordLoginEnabled() &&
-                !_contentObjectService.LoginDiscontinuationConfiguration.IsEmailOnExceptionsList(userNameOrEmail))
+                !_contentObjectService.LoginDiscontinuationConfiguration.IsEmailInExceptionsList(userNameOrEmail))
                 {
                     _trace.Information("Password login unsupported.");
 
@@ -178,7 +178,7 @@ namespace NuGetGallery.Authentication
             return FindMatchingApiKey(credential);
         }
 
-        public async Task RevokeApiKeyCredential(Credential apiKeyCredential, CredentialRevocationSource revocationSourceKey, bool commitChanges = true)
+        public virtual async Task RevokeApiKeyCredential(Credential apiKeyCredential, CredentialRevocationSource revocationSourceKey, bool commitChanges = true)
         {
             if (apiKeyCredential == null)
             {

@@ -3,17 +3,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NuGet.Frameworks;
 
 namespace NuGetGallery.Frameworks
 {
-    public class FrameworkCompatibilityService : IFrameworkCompatibilityService
+    public static class FrameworkCompatibilityService
     {
         private static readonly IFrameworkCompatibilityProvider CompatibilityProvider = DefaultCompatibilityProvider.Instance;
         private static readonly IReadOnlyList<NuGetFramework> AllSupportedFrameworks = SupportedFrameworks.AllSupportedNuGetFrameworks;
         private static readonly IReadOnlyDictionary<NuGetFramework, ISet<NuGetFramework>> CompatibilityMatrix = GetCompatibilityMatrix();
 
-        public ISet<NuGetFramework> GetCompatibleFrameworks(IEnumerable<NuGetFramework> packageFrameworks)
+        public static ISet<NuGetFramework> GetCompatibleFrameworks(IEnumerable<NuGetFramework> packageFrameworks)
         {
             if (packageFrameworks == null)
             {
@@ -29,8 +30,29 @@ namespace NuGetGallery.Frameworks
                     continue;
                 }
 
-                if (CompatibilityMatrix.TryGetValue(packageFramework, out var compatibleFrameworks))
+                var normalizedPackageFramework = packageFramework;
+                bool hasPlatformVersion = false;
+
+                if (!string.IsNullOrEmpty(packageFramework.Platform) && (packageFramework.PlatformVersion != FrameworkConstants.EmptyVersion))
                 {
+                    normalizedPackageFramework = new NuGetFramework(packageFramework.Framework,
+                                                                    packageFramework.Version,
+                                                                    packageFramework.Platform,
+                                                                    FrameworkConstants.EmptyVersion);
+
+                    hasPlatformVersion = true;
+                }
+
+                if (CompatibilityMatrix.TryGetValue(normalizedPackageFramework, out var compatibleFrameworks))
+                {
+                    if (hasPlatformVersion)
+                    {
+                        compatibleFrameworks = compatibleFrameworks.ToHashSet(); // make a copy
+
+                        compatibleFrameworks.Remove(normalizedPackageFramework);
+                        compatibleFrameworks.Add(packageFramework);
+                    }
+
                     allCompatibleFrameworks.UnionWith(compatibleFrameworks);
                 }
                 else

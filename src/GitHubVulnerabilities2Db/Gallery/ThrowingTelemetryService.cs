@@ -206,7 +206,7 @@ namespace GitHubVulnerabilities2Db.Gallery
             throw new NotImplementedException();
         }
 
-        public void TrackPackageDeprecate(IReadOnlyList<Package> packages, PackageDeprecationStatus status, PackageRegistration alternateRegistration, Package alternatePackage, bool hasCustomMessage)
+        public void TrackPackageDeprecate(IReadOnlyList<Package> packages, PackageDeprecationStatus status, PackageRegistration alternateRegistration, Package alternatePackage, bool hasCustomMessage, bool hasChanges)
         {
             throw new NotImplementedException();
         }
@@ -398,6 +398,14 @@ namespace GitHubVulnerabilities2Db.Gallery
 
         public IDisposable TrackAsyncSqlConnectionCreationDuration()
         {
+            throw new NotImplementedException();
+        }
+
+        public void TrackDownloadJsonTotalPackageIds(int totalPackageIds) {
+            throw new NotImplementedException();
+        }
+
+        public void TrackDownloadJsonTotalPackageVersions(int totalPackageVersions) {
             throw new NotImplementedException();
         }
     }

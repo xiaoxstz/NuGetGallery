@@ -16,6 +16,7 @@ using NuGetGallery.Authentication.Providers;
 using NuGetGallery.Authentication.Providers.AzureActiveDirectory;
 using NuGetGallery.Authentication.Providers.AzureActiveDirectoryV2;
 using NuGetGallery.Authentication.Providers.MicrosoftAccount;
+using NuGetGallery.Configuration;
 using NuGetGallery.Framework;
 using NuGetGallery.Infrastructure.Authentication;
 using NuGetGallery.Infrastructure.Mail.Messages;
@@ -31,8 +32,79 @@ namespace NuGetGallery.Controllers
         private const string SignInViewNuGetName = "SignInNuGetAccount";
         private const string LinkExternalViewName = "LinkExternal";
 
+        public class TheSignUpAction : TestContainer
+        {
+            public TheSignUpAction()
+            {
+                var isEmailOnExceptionList = new Mock<ILoginDiscontinuationConfiguration>();
+                isEmailOnExceptionList
+                    .Setup(x => x.IsEmailInExceptionsList(It.IsAny<String>()))
+                    .Returns(false);
+                GetMock<IContentObjectService>()
+                    .Setup(x => x.LoginDiscontinuationConfiguration)
+                    .Returns(isEmailOnExceptionList.Object);
+                GetMock<IFeatureFlagService>()
+                    .Setup(f => f.IsNewAccount2FAEnforcementEnabled())
+                    .Returns(false);
+            }
+
+            [Fact]
+            public void WhenRequestAuthenticatedRedirectsToReturnUrl()
+            {
+                var controller = GetController<AuthenticationController>();
+                GetMock<HttpRequestBase>()
+                    .SetupGet(x => x.IsAuthenticated)
+                    .Returns(true);
+                var returnUrl = "/foo/bar/baz";
+                var fakes = Get<Fakes>();
+                controller.SetCurrentUser(fakes.User);
+
+                var result = controller.SignUp(returnUrl);
+
+                ResultAssert.IsSafeRedirectTo(result, returnUrl);
+                Assert.Equal(Strings.AlreadyLoggedIn, controller.TempData["Message"]);
+            }
+
+            [Fact]
+            public void When2faEnforcementEnabledReturnSignInView()
+            {
+                var controller = GetController<AuthenticationController>();
+                var featureFlagServiceMock = GetMock<IFeatureFlagService>();
+                featureFlagServiceMock
+                    .Setup(f => f.IsNewAccount2FAEnforcementEnabled())
+                    .Returns(true)
+                    .Verifiable();
+
+                var result = controller.SignUp(string.Empty);
+
+                featureFlagServiceMock.Verify();
+                ResultAssert.IsRedirectTo(result, controller.Url.LogOn(null, relativeUrl: false));
+            }
+
+            [Fact]
+            public void WhenNotAuthenticatedAnd2faEnforcementDisabledReturnsRegisterView()
+            {
+                var controller = GetController<AuthenticationController>();
+
+                var result = controller.SignUp(string.Empty);
+
+                ResultAssert.IsView<LogOnViewModel>(result, viewName: RegisterViewName);
+            }
+        }
+
         public class TheLogOnAction : TestContainer
         {
+            public TheLogOnAction()
+            {
+                var isEmailOnExceptionList = new Mock<ILoginDiscontinuationConfiguration>();
+                isEmailOnExceptionList
+                    .Setup(x => x.IsEmailInExceptionsList(It.IsAny<String>()))
+                    .Returns(false);
+                GetMock<IContentObjectService>()
+                    .Setup(x => x.LoginDiscontinuationConfiguration)
+                    .Returns(isEmailOnExceptionList.Object);
+            }
+
             [Fact]
             public void GivenUserAlreadyAuthenticated_ItRedirectsToReturnUrl()
             {
@@ -215,6 +287,17 @@ namespace NuGetGallery.Controllers
 
         public class TheSignInAction : TestContainer
         {
+            public TheSignInAction()
+            {
+                var isEmailOnExceptionList = new Mock<ILoginDiscontinuationConfiguration>();
+                isEmailOnExceptionList
+                    .Setup(x => x.IsEmailInExceptionsList(It.IsAny<String>()))
+                    .Returns(false);
+                GetMock<IContentObjectService>()
+                    .Setup(x => x.LoginDiscontinuationConfiguration)
+                    .Returns(isEmailOnExceptionList.Object);
+            }
+
             [Fact]
             public async Task GivenUserAlreadyAuthenticated_ItRedirectsToReturnUrl()
             {
@@ -722,6 +805,20 @@ namespace NuGetGallery.Controllers
 
         public class TheRegisterAction : TestContainer
         {
+            public TheRegisterAction()
+            {
+                var isEmailOnExceptionList = new Mock<ILoginDiscontinuationConfiguration>();
+                isEmailOnExceptionList
+                    .Setup(x => x.IsEmailInExceptionsList(It.IsAny<String>()))
+                    .Returns(false);
+                GetMock<IContentObjectService>()
+                    .Setup(x => x.LoginDiscontinuationConfiguration)
+                    .Returns(isEmailOnExceptionList.Object);
+                GetMock<IFeatureFlagService>()
+                    .Setup(f => f.IsNewAccount2FAEnforcementEnabled())
+                    .Returns(false);
+            }
+
             [Fact]
             public async Task WillShowTheViewWithErrorsIfTheModelStateIsInvalid()
             {
@@ -759,6 +856,42 @@ namespace NuGetGallery.Controllers
                 ResultAssert.IsView(result, viewName: RegisterViewName);
                 Assert.False(controller.ModelState.IsValid);
                 Assert.Equal("aMessage", controller.ModelState["Register"].Errors[0].ErrorMessage);
+            }
+
+            [Fact]
+            public async Task WhenNotLinkingAnd2faEnforcementWillReturnSignInView()
+            {
+                // Arrange
+                var authUser = new AuthenticatedUser(
+                    new User("theUsername")
+                    {
+                        UnconfirmedEmailAddress = "unconfirmed@example.com",
+                        EmailConfirmationToken = "t0k3n"
+                    },
+                    new Credential());
+
+                GetMock<IFeatureFlagService>()
+                    .Setup(x => x.IsNewAccount2FAEnforcementEnabled())
+                    .Returns(true)
+                    .Verifiable();
+
+                var controller = GetController<AuthenticationController>();
+
+                // Act
+                var result = await controller.Register(
+                    new LogOnViewModel()
+                    {
+                        Register = new RegisterViewModel
+                        {
+                            Username = authUser.User.Username,
+                            Password = "thePassword",
+                            EmailAddress = authUser.User.UnconfirmedEmailAddress,
+                        }
+                    }, "/theReturnUrl", linkingAccount: false);
+
+                // Assert
+                GetMock<IFeatureFlagService>().Verify();
+                ResultAssert.IsRedirectTo(result, controller.Url.LogOn(null, relativeUrl: false));
             }
 
             [Fact]
@@ -1309,6 +1442,41 @@ namespace NuGetGallery.Controllers
             }
         }
 
+        public class TheAuthenticateGetAction : TestContainer
+        {
+            [Fact]
+            public void ReturnsErrorWhenProviderIsNull()
+            {
+                // Arrange
+                const string returnUrl = "/theReturnUrl";
+                EnableAllAuthenticators(Get<AuthenticationService>());
+                var controller = GetController<AuthenticationController>();
+
+                // Act
+                var result = controller.AuthenticateGet(returnUrl, provider: null);
+
+                // Assert
+                ResultAssert.IsSafeRedirectTo(result, returnUrl);
+                Assert.Equal(ServicesStrings.AuthenticationProviderNotFound, controller.TempData["ErrorMessage"]);
+            }
+
+            [Fact]
+            public void ReturnsErrorWhenProviderIsUnknown()
+            {
+                // Arrange
+                const string returnUrl = "/theReturnUrl";
+                EnableAllAuthenticators(Get<AuthenticationService>());
+                var controller = GetController<AuthenticationController>();
+
+                // Act
+                var result = controller.AuthenticateGet(returnUrl, provider: "a provider that will never exist... hopefully!");
+
+                // Assert
+                ResultAssert.IsSafeRedirectTo(result, returnUrl);
+                Assert.Equal(ServicesStrings.AuthenticationProviderNotFound, controller.TempData["ErrorMessage"]);
+            }
+        }
+
         public class TheLinkOrChangeExternalCredentialAction : TestContainer
         {
             [Fact]
@@ -1576,23 +1744,27 @@ namespace NuGetGallery.Controllers
 
         public class TheAuthenticateExternalAction : TestContainer
         {
-            [Fact]
-            public void ForMissingExternalProvider_ErrorIsReturned()
+            [Theory]
+            [InlineData("/theReturnUrl")]
+            [InlineData("/")]
+            public void ForMissingExternalProvider_ErrorIsReturned(string returnUrl)
             {
                 // Arrange
                 var controller = GetController<AuthenticationController>();
                 controller.SetCurrentUser(TestUtility.FakeUser);
 
                 // Act
-                var result = controller.AuthenticateExternal("theReturnUrl");
+                var result = controller.AuthenticateExternal(returnUrl);
 
                 // Assert
-                ResultAssert.IsRedirectTo(result, "theReturnUrl");
+                ResultAssert.IsRedirectTo(result, returnUrl);
                 Assert.Equal(Strings.ChangeCredential_ProviderNotFound, controller.TempData["Message"]);
             }
 
-            [Fact]
-            public void ForAADLinkedAccount_ErrorIsReturnedDueToOrgPolicy()
+            [Theory]
+            [InlineData("/theReturnUrl")]
+            [InlineData("/")]
+            public void ForAADLinkedAccount_ErrorIsReturnedDueToOrgPolicy(string returnUrl)
             {
                 // Arrange
                 var fakes = Get<Fakes>();
@@ -1612,15 +1784,17 @@ namespace NuGetGallery.Controllers
                 controller.SetCurrentUser(user);
 
                 // Act
-                var result = controller.AuthenticateExternal("theReturnUrl");
+                var result = controller.AuthenticateExternal(returnUrl);
 
                 // Assert
-                ResultAssert.IsRedirectTo(result, "theReturnUrl");
+                ResultAssert.IsRedirectTo(result, returnUrl);
                 Assert.NotNull(controller.TempData["WarningMessage"]);
             }
 
-            [Fact]
-            public void ForNonAADLinkedAccount_WithOrgPolicyCompletesSuccessfully()
+            [Theory]
+            [InlineData("/theReturnUrl")]
+            [InlineData("/")]
+            public void ForNonAADLinkedAccount_WithOrgPolicyCompletesSuccessfully(string returnUrl)
             {
                 // Arrange
                 var fakes = Get<Fakes>();
@@ -1640,11 +1814,11 @@ namespace NuGetGallery.Controllers
                 controller.SetCurrentUser(user);
 
                 // Act
-                var result = controller.AuthenticateExternal("theReturnUrl");
+                var result = controller.AuthenticateExternal(returnUrl);
 
                 // Assert
                 Assert.Null(controller.TempData["WarningMessage"]);
-                ResultAssert.IsChallengeResult(result, "AzureActiveDirectoryV2", controller.Url.LinkOrChangeExternalCredential("theReturnUrl"));
+                ResultAssert.IsChallengeResult(result, "AzureActiveDirectoryV2", controller.Url.LinkOrChangeExternalCredential(returnUrl));
             }
 
             [Theory]
@@ -1685,10 +1859,52 @@ namespace NuGetGallery.Controllers
                 // Assert
                 ResultAssert.IsChallengeResult(result, "AzureActiveDirectoryV2", controller.Url.LinkOrChangeExternalCredential(returnUrl));
             }
+
+            [Fact]
+            public void WillRedirectToHomePageOnFailureForAbsoluteUrls()
+            {
+                // Arrange
+                var controller = GetController<AuthenticationController>();
+                controller.SetCurrentUser(TestUtility.FakeUser);
+
+                // Act
+                var result = controller.AuthenticateExternal("theReturnUrl"); // not a relative URL
+
+                // Assert
+                ResultAssert.IsRedirectTo(result, "/");
+                Assert.Equal(Strings.ChangeCredential_ProviderNotFound, controller.TempData["Message"]);
+            }
+
+            [Fact]
+            public void WillRedirectToHomePageOnSuccessForAbsoluteUrls()
+            {
+                // Arrange
+                const string returnUrl = "theReturnUrl"; // not a relative URL
+                EnableAllAuthenticators(Get<AuthenticationService>());
+                var controller = GetController<AuthenticationController>();
+                controller.SetCurrentUser(TestUtility.FakeUser);
+
+                // Act
+                var result = controller.AuthenticateExternal(returnUrl);
+
+                // Assert
+                ResultAssert.IsChallengeResult(result, "AzureActiveDirectoryV2", controller.Url.LinkOrChangeExternalCredential("/"));
+            }
         }
 
         public class TheLinkExternalAccountAction : TestContainer
         {
+            public TheLinkExternalAccountAction()
+            {
+                var isEmailOnExceptionList = new Mock<ILoginDiscontinuationConfiguration>();
+                isEmailOnExceptionList
+                    .Setup(x => x.IsEmailInExceptionsList(It.IsAny<String>()))
+                    .Returns(false);
+                GetMock<IContentObjectService>()
+                    .Setup(x => x.LoginDiscontinuationConfiguration)
+                    .Returns(isEmailOnExceptionList.Object);
+            }
+
             [Theory]
             [InlineData("access_denied")]
             [InlineData("consent_required")]
@@ -1711,7 +1927,7 @@ namespace NuGetGallery.Controllers
             [Theory]
             [InlineData("server_error", "The server encountered an unexpected error.")]
             [InlineData("temporarily_unavailable", "The server is temporarily too busy to handle the request.")]
-            [InlineData("invalid_resource", "The target resource is invalid because either it does not exist, Azure AD cannot find it, or it is not correctly configured.")]
+            [InlineData("invalid_resource", "The target resource is invalid because either it does not exist, Microsoft Entra ID cannot find it, or it is not correctly configured.")]
             [InlineData("invalid_request", "Protocol error, such as a missing, required parameter.")]
             public async Task GivenExpiredExternalAuth_ItRedirectsBackToLogOnWithPassedErrorMessage(string error, string errorDescription)
             {
@@ -2182,7 +2398,7 @@ namespace NuGetGallery.Controllers
                 var msAuther = new MicrosoftAccountAuthenticator();
                 var msaUI = msAuther.GetUI();
 
-                GetMock<AuthenticationService>(); // Force a mock to be created
+                GetMock<AuthenticationService>(); // Force a mock to be created                
 
                 var controller = GetController<AuthenticationController>();
 

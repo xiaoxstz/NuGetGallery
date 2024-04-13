@@ -65,6 +65,8 @@
     <Compile Include="App_Start\RuntimeServiceProviderTests.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminControllerBaseFacts.cs" />
     <Compile Include="Areas\Admin\Controllers\ApiKeysControllerFacts.cs" />
+    <Compile Include="Areas\Admin\Controllers\ChangeUsernameControllerFacts.cs" />
+    <Compile Include="Areas\Admin\Controllers\CorrectIsLatestControllerFacts.cs" />
     <Compile Include="Areas\Admin\Controllers\DeleteAccountControllerFacts.cs" />
     <Compile Include="Areas\Admin\Controllers\DeleteControllerFacts.cs" />
     <Compile Include="Areas\Admin\Controllers\LockPackageControllerFacts.cs" />
@@ -83,7 +85,10 @@
     <Compile Include="Authentication\Providers\CommonAuth\AzureActiveDirectoryV2AuthenticatorFacts.cs" />
     <Compile Include="Authentication\TestCredentialHelper.cs" />
     <Compile Include="Extensions\CakeBuildManagerExtensionsFacts.cs" />
+    <Compile Include="Filters\RequiresUserAgentAttributeFacts.cs" />
     <Compile Include="Helpers\PackageValidationHelperFacts.cs" />
+    <Compile Include="Helpers\ReflowServiceSetupHelper.cs" />
+    <Compile Include="Infrastructure\Mail\Messages\ApiKeyRevokedMessageFacts.cs" />
     <Compile Include="Queries\AutocompleteDatabasePackageIdsQueryFacts.cs" />
     <Compile Include="Queries\AutocompleteDatabasePackageVersionsQueryFacts.cs" />
     <Compile Include="Queries\AutocompleteServiceQueryFacts.cs" />
@@ -306,6 +311,7 @@
     <Compile Include="UriExtensionsFacts.cs" />
     <Compile Include="UrlHelperExtensionsFacts.cs" />
     <Compile Include="ViewModels\DependencySetsViewModelFacts.cs" />
+    <Compile Include="Helpers\DeprecationItemsHelper.cs" />
     <Compile Include="ViewModels\DisplayLicenseViewModelFacts.cs" />
     <Compile Include="ViewModels\DisplayPackageViewModelFacts.cs" />
     <Compile Include="ViewModels\ListCertificateItemViewModelFacts.cs" />
@@ -316,6 +322,7 @@
     <Compile Include="ViewModels\PreviousNextPagerViewModelFacts.cs" />
     <Compile Include="ViewModels\SignerViewModelFacts.cs" />
     <Compile Include="ViewModels\UserProfileModelFacts.cs" />
+    <Compile Include="Helpers\VulnerabilityItemsHelper.cs" />
     <Compile Include="Views\Packages\ValidationIssueFacts.cs" />
     <Compile Include="Views\UrlHelperFacts.cs" />
   </ItemGroup>
@@ -329,6 +336,9 @@
     <EmbeddedResource Include="TestData\certificate.cer" />
     <EmbeddedResource Include="TestData\icon.png" />
     <EmbeddedResource Include="TestData\icon.jpg" />
+    <EmbeddedResource Include="TestData\PackageWithDoubleBackwardSlash.1.0.0.nupkg" />
+    <EmbeddedResource Include="TestData\PackageWithDoubleForwardSlash.1.0.0.nupkg" />
+    <EmbeddedResource Include="TestData\PackageWithVeryLongZipFileEntry.1.0.0.nupkg" />
     <EmbeddedResource Include="TestData\Zip64Package.Corrupted.1.0.0.nupkg" />
   </ItemGroup>
   <ItemGroup>
@@ -364,16 +374,16 @@
       <Version>4.8.2</Version>
     </PackageReference>
     <PackageReference Include="xunit.abstractions">
-      <Version>2.0.1</Version>
+      <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="xunit.assert">
-      <Version>2.3.1</Version>
+      <Version>2.5.0</Version>
     </PackageReference>
     <PackageReference Include="xunit.core">
       <Version>2.3.1</Version>
     </PackageReference>
     <PackageReference Include="xunit.runner.visualstudio">
-      <Version>2.4.1</Version>
+      <Version>2.5.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles</IncludeAssets>
       <ExcludeAssets>analyzers</ExcludeAssets>
       <PrivateAssets>all</PrivateAssets>

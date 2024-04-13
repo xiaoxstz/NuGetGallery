@@ -259,6 +259,11 @@ namespace NuGetGallery
         bool IsShowReportAbuseSafetyChangesEnabled();
 
         /// <summary>
+        /// Whether online safety categories are available to content owned by at least one Microsoft Entra ID-authenticated account
+        /// </summary>
+        bool IsAllowAadContentSafetyReportsEnabled();
+
+        /// <summary>
         /// Whether rendering Markdown content to HTML using Markdig is enabled
         /// </summary>
         bool IsMarkdigMdRenderingEnabled();
@@ -272,6 +277,11 @@ namespace NuGetGallery
         /// Whether the new warning of the verfiy metadata when upload package is enabled.
         /// </summary>
         bool IsDisplayUploadWarningV2Enabled(User user);
+
+        /// <summary>
+        /// Whether the new warning of the missing readme is displayed to package authors
+        /// </summary>
+        bool IsDisplayPackageReadmeWarningEnabled(User user);
 
         /// <summary>
         /// Whether or not the user can delete a package through the API.
@@ -312,5 +322,20 @@ namespace NuGetGallery
         /// Whether or not NuGet.org password login is supported. NuGet.org accounts in the <see cref="LoginDiscontinuationConfiguration.ExceptionsForEmailAddresses"/> will always be supported.
         /// </summary>
         bool IsNuGetAccountPasswordLoginEnabled();
+
+        /// <summary>
+        /// Whether or not to allow filtering by frameworks on NuGet.org search
+        /// </summary>
+        bool IsFrameworkFilteringEnabled(User user);
+
+        /// <summary>
+        /// Whether or not to display TFM badges in search results
+        /// </summary>
+        bool IsDisplayTfmBadgesEnabled(User user);
+
+        /// <summary>
+        /// Whether or not to allow filtering by frameworks on NuGet.org search
+        /// </summary>
+        bool IsAdvancedFrameworkFilteringEnabled(User user);
     }
 }

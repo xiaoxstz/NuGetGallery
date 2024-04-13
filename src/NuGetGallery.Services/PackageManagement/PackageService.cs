@@ -8,19 +8,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NuGet.Client;
-using NuGet.ContentModel;
 using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
-using NuGet.RuntimeModel;
 using NuGet.Services.Entities;
 using NuGet.Versioning;
 using NuGetGallery.Auditing;
 using NuGetGallery.Helpers;
 using NuGetGallery.Packaging;
 using NuGetGallery.Security;
-using PackageType = NuGet.Packaging.Core.PackageType;
 
 namespace NuGetGallery
 {
@@ -243,8 +239,33 @@ namespace NuGetGallery
                 includePackageRegistration: includePackageRegistration,
                 includeUser: false,
                 includeSymbolPackages: false,
-                includeDeprecation: false,
-                includeDeprecationRelationships: false);
+                includeDeprecations: false,
+                includeDeprecationRelationships: false,
+                includeSupportedFrameworks: false);
+
+            return packages.ToList();
+        }
+
+        public IReadOnlyCollection<Package> FindPackagesById(
+            string id,
+            bool includePackageRegistration,
+            bool includeDeprecations,
+            bool includeSupportedFrameworks)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var packages = GetPackagesByIdQueryable(
+                id,
+                includeLicenseReports: false,
+                includePackageRegistration: includePackageRegistration,
+                includeUser: false,
+                includeSymbolPackages: false,
+                includeDeprecations: includeDeprecations,
+                includeDeprecationRelationships: false,
+                includeSupportedFrameworks: includeSupportedFrameworks);
 
             return packages.ToList();
         }

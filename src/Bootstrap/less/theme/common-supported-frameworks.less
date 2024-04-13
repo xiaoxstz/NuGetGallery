@@ -10,6 +10,15 @@
 .framework-badges {
   .framework;
   margin-bottom: 14px;
+
+  a {
+    display: inline-block;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
 }
 
 .framework-badge {
@@ -80,6 +89,8 @@
 .frameworktableinfo-asset-icon{
   .frameworktableinfo;
   background-color: @badge-dark;
+  justify-content: center;
+  display: inline-block;
 }
 
 .frameworktableinfo-text {

@@ -276,6 +276,11 @@ namespace NuGetGallery.AccountDeleter
             throw new NotImplementedException();
         }
 
+        public bool IsAllowAadContentSafetyReportsEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsTyposquattingEnabled()
         {
             throw new NotImplementedException();
@@ -292,6 +297,26 @@ namespace NuGetGallery.AccountDeleter
         }
 
         public bool IsDisplayUploadWarningV2Enabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDisplayPackageReadmeWarningEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsFrameworkFilteringEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDisplayTfmBadgesEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAdvancedFrameworkFilteringEnabled(User user)
         {
             throw new NotImplementedException();
         }

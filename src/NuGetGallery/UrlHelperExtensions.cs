@@ -3,12 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NuGet.Services.Entities;
-using NuGet.Services.Logging;
 using NuGetGallery.Areas.Admin;
 using NuGetGallery.Areas.Admin.Controllers;
 using NuGetGallery.Configuration;
@@ -171,6 +169,10 @@ namespace NuGetGallery
             int page,
             string q,
             bool includePrerelease,
+            string frameworks,
+            string tfms,
+            bool includeComputedFrameworks,
+            string frameworkFilterMode,
             string packageType,
             string sortBy,
             bool relativeUrl = true)
@@ -190,6 +192,26 @@ namespace NuGetGallery
             if (!includePrerelease)
             {
                 routeValues["prerel"] = "false";
+            }
+
+            if (!string.IsNullOrWhiteSpace(frameworks))
+            {
+                routeValues["frameworks"] = frameworks;
+            }
+
+            if (!string.IsNullOrWhiteSpace(tfms))
+            {
+                routeValues["tfms"] = tfms;
+            }
+
+            if (!includeComputedFrameworks)
+            {
+                routeValues["includeComputedFrameworks"] = "false";
+            }
+
+            if (!string.IsNullOrWhiteSpace(frameworkFilterMode))
+            {
+                routeValues["frameworkFilterMode"] = frameworkFilterMode;
             }
 
             if (!string.IsNullOrWhiteSpace(packageType))
@@ -1380,6 +1402,11 @@ namespace NuGetGallery
             return url.PackageVersionAction(nameof(PackagesController.License), package, relativeUrl);
         }
 
+        public static string FrameworksTab(this UrlHelper url, string id, string version, bool relativeUrl = true)
+        {
+            return url.Package(id, version, relativeUrl).TrimEnd('/') + "#supportedframeworks-body-tab";
+        }
+
         public static string Terms(this UrlHelper url, bool relativeUrl = true)
         {
             if (!String.IsNullOrEmpty(_configuration.Current.ExternalTermsOfUseUrl))
@@ -1398,6 +1425,11 @@ namespace NuGetGallery
             }
 
             return GetActionLink(url, "Privacy", "Pages", relativeUrl);
+        }
+
+        public static string ExternalPrivacyUrl(this UrlHelper url)
+        {
+            return _configuration.Current.ExternalPrivacyPolicyUrl;
         }
 
         public static string About(this UrlHelper url, bool relativeUrl = true)
@@ -1443,6 +1475,11 @@ namespace NuGetGallery
         public static string RemoveCredential(this UrlHelper url, bool relativeUrl = true)
         {
             return GetActionLink(url, "RemoveCredential", "Users", relativeUrl);
+        }
+
+        public static string RevokeApiKeyCredential(this UrlHelper url, bool relativeUrl = true)
+        {
+            return GetActionLink(url, "RevokeApiKeyCredential", "Users", relativeUrl);
         }
 
         public static string RegenerateCredential(this UrlHelper url, bool relativeUrl = true)

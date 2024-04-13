@@ -2,8 +2,7 @@
   .readme-container {
     display: block;
     padding: 10.5px;
-    background-color: @pre-bg;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     word-break: normal;
     margin-bottom: @default-margin-bottom;
     overflow: auto;
@@ -15,7 +14,9 @@
   .table {
     width: max-content;
     border: 1px solid @table-border-color;
-
+    overflow: auto;
+    display: block;
+    word-break: normal;
     th, td {
       border: 1px solid @table-border-color;
     }
@@ -44,8 +45,9 @@
 
   pre {
     code.hljs {
-      background-color: #f6f8fa;
+      background-color: @pre-bg;
       color: #24292e; 
+      white-space: pre;
       
       .hljs-doctag,
       .hljs-keyword,
@@ -92,7 +94,7 @@
       .hljs-comment,
       .hljs-code,
       .hljs-formula {
-        color: #6a737d;
+        color: #646d76;
       }
       
       .hljs-name,

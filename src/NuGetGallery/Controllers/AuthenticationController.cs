@@ -115,6 +115,10 @@ namespace NuGetGallery
             {
                 return LoggedInRedirect(returnUrl);
             }
+            else if (_featureFlagService.IsNewAccount2FAEnforcementEnabled())
+            {
+                return Redirect(Url.LogOn(null, relativeUrl: false));
+            }
 
             return RegisterView(new LogOnViewModel());
         }
@@ -259,6 +263,11 @@ namespace NuGetGallery
         [HttpGet]
         public virtual ActionResult RegisterLegacy(string returnUrl)
         {
+            if (_featureFlagService.IsNewAccount2FAEnforcementEnabled())
+            {
+                return Redirect(Url.LogOn(null, relativeUrl: false));
+            }
+
             return Redirect(Url.LogOnNuGetAccount(returnUrl, relativeUrl: false));
         }
 
@@ -305,6 +314,10 @@ namespace NuGetGallery
                         result.Credential,
                         autoConfirm: (result.Credential.IsExternal() && string.Equals(result.UserInfo?.Email, model.Register.EmailAddress)),
                         enableMultiFactorAuthentication: enableMultiFactorAuthentication);
+                }
+                else if (_featureFlagService.IsNewAccount2FAEnforcementEnabled())
+                {
+                    return Redirect(Url.LogOn(null, relativeUrl: false));
                 }
                 else
                 {
@@ -422,6 +435,12 @@ namespace NuGetGallery
         [HttpGet]
         public virtual ActionResult AuthenticateGet(string returnUrl, string provider)
         {
+            if (provider == null || !_authService.Authenticators.ContainsKey(provider))
+            {
+                TempData["ErrorMessage"] = ServicesStrings.AuthenticationProviderNotFound;
+                return SafeRedirect(returnUrl);
+            }
+
             return AuthenticateAndLinkExternal(returnUrl, provider);
         }
 
@@ -444,6 +463,12 @@ namespace NuGetGallery
                     .Organization
                     .SecurityPolicies
                     .Any(policy => policy.Name == nameof(RequireOrganizationTenantPolicy)));
+
+            // Validate that the returnUrl is a relative URL to prevent untrusted URL redirection
+            if (!Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = "/";
+            }
 
             if (userOrganizationsWithTenantPolicy != null && userOrganizationsWithTenantPolicy.Any())
             {
@@ -625,7 +650,7 @@ namespace NuGetGallery
                     wasMultiFactorAuthenticated: result?.LoginDetails?.WasMultiFactorAuthenticated ?? false);
 
                 // Update the 2FA if used during login but user does not have it set on their account. Enforced for only personal microsoft accounts
-                // record it in the DB for the AAD accounts.
+                // record it in the DB for the Microsoft Entra ID accounts.
                 if (result?.LoginDetails != null
                     && result.LoginDetails.WasMultiFactorAuthenticated
                     && !result.Authentication.User.EnableMultiFactorAuthentication
@@ -736,9 +761,9 @@ namespace NuGetGallery
             // 1. The authenticator supports multi-factor authentication, otherwise no use.
             // 2. The user has enabled multi-factor authentication for their account.
             // 3. The user did not use the multi-factor authentication for the session, obviously.
-            // 4. The user authenticated with an external account (currently only MSA and AAD are supported).
+            // 4. The user authenticated with an external account (currently only MSA and Microsoft Entra ID are supported).
             // 5. If the 2FA enforcement for new accounts is enabled all external account types should be enforced (step 4 validated this).
-            //    If not, only user authenticated with a personal microsoft account is enforced. AAD 2FA policy is controlled by the tenant admins.
+            //    If not, only user authenticated with a personal microsoft account is enforced. Microsoft Entra ID 2FA policy is controlled by the tenant admins.
             return result.Authenticator.SupportsMultiFactorAuthentication()
                 && result.Authentication.User.EnableMultiFactorAuthentication
                 && !result.LoginDetails.WasMultiFactorAuthenticated
@@ -856,7 +881,7 @@ namespace NuGetGallery
         private ActionResult AuthenticationFailureOrExternalLinkExpired(string errorMessage = null)
         {
             // We need a special case here because of https://github.com/NuGet/NuGetGallery/issues/7544. An unmanaged tenant scenario
-            // needs the FAQ URI appended to the AAD error, and we do that here so it appears in the header.
+            // needs the FAQ URI appended to the Microsoft Entra ID error, and we do that here so it appears in the header.
             if (!string.IsNullOrEmpty(errorMessage) &&
                 errorMessage.IndexOf("AADSTS65005", StringComparison.OrdinalIgnoreCase) > -1 &&
                 errorMessage.IndexOf("unmanaged", StringComparison.OrdinalIgnoreCase) > -1)
@@ -930,7 +955,7 @@ namespace NuGetGallery
             existingModel.SignIn = existingModel.SignIn ?? new SignInViewModel();
             existingModel.Register = existingModel.Register ?? new RegisterViewModel();
             existingModel.IsNuGetAccountPasswordLoginEnabled = _featureFlagService.IsNuGetAccountPasswordLoginEnabled();
-
+            existingModel.IsEmailOnExceptionList = _contentObjectService.LoginDiscontinuationConfiguration.IsEmailInExceptionsList(existingModel.SignIn.UserNameOrEmail);
             return View(viewName, existingModel);
         }
 

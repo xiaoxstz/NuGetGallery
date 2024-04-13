@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -19,6 +18,7 @@ using NuGetGallery.Areas.Admin.ViewModels;
 using NuGetGallery.Authentication;
 using NuGetGallery.Configuration;
 using NuGetGallery.Filters;
+using NuGetGallery.Frameworks;
 using NuGetGallery.Helpers;
 using NuGetGallery.Infrastructure.Authentication;
 using NuGetGallery.Infrastructure.Mail.Messages;
@@ -56,7 +56,8 @@ namespace NuGetGallery
             IPackageVulnerabilitiesService packageVulnerabilitiesService,
             IMessageServiceConfiguration messageServiceConfiguration,
             IIconUrlProvider iconUrlProvider,
-            IGravatarProxyService gravatarProxy)
+            IGravatarProxyService gravatarProxy,
+            IPackageFrameworkCompatibilityFactory frameworkCompatibilityFactory)
             : base(
                   authService,
                   packageService,
@@ -70,7 +71,8 @@ namespace NuGetGallery
                   deleteAccountService,
                   iconUrlProvider,
                   gravatarProxy,
-                  featureFlagService)
+                  featureFlagService,
+                  frameworkCompatibilityFactory)
         {
             _packageOwnerRequestService = packageOwnerRequestService ?? throw new ArgumentNullException(nameof(packageOwnerRequestService));
             _config = config ?? throw new ArgumentNullException(nameof(config));
@@ -80,8 +82,8 @@ namespace NuGetGallery
             _packageVulnerabilitiesService = packageVulnerabilitiesService ?? throw new ArgumentNullException(nameof(packageVulnerabilitiesService));
 
             _listPackageItemRequiredSignerViewModelFactory = new ListPackageItemRequiredSignerViewModelFactory(
-                securityPolicyService, iconUrlProvider, packageVulnerabilitiesService);
-            _listPackageItemViewModelFactory = new ListPackageItemViewModelFactory(iconUrlProvider);
+                securityPolicyService, iconUrlProvider, packageVulnerabilitiesService, frameworkCompatibilityFactory, featureFlagService);
+            _listPackageItemViewModelFactory = new ListPackageItemViewModelFactory(iconUrlProvider, frameworkCompatibilityFactory, _featureFlagService);
         }
 
         public override string AccountAction => nameof(Account);
@@ -631,7 +633,7 @@ namespace NuGetGallery
         [ValidateRecaptchaResponse]
         public virtual async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if(!_featureFlagService.IsNuGetAccountPasswordLoginEnabled() && !ContentObjectService.LoginDiscontinuationConfiguration.IsEmailOnExceptionsList(model.Email))
+            if(!_featureFlagService.IsNuGetAccountPasswordLoginEnabled() && !ContentObjectService.LoginDiscontinuationConfiguration.IsEmailInExceptionsList(model.Email))
             {
                 ModelState.AddModelError(string.Empty, Strings.ForgotPassword_Disabled_Error);
 
@@ -749,7 +751,7 @@ namespace NuGetGallery
                 .OrderByDescending(p => p.PackageRegistration.DownloadCount)
                 .Select(p =>
                 {
-                    var viewModel = _listPackageItemViewModelFactory.Create(p, currentUser);
+                    var viewModel = _listPackageItemViewModelFactory.Create(p, currentUser, false);
                     viewModel.DownloadCount = p.PackageRegistration.DownloadCount;
                     return viewModel;
                 }).ToList();
@@ -896,6 +898,36 @@ namespace NuGetGallery
             }
 
             return await RemoveCredentialInternal(user, cred, Strings.CredentialRemoved);
+        }
+
+        [HttpPost]
+        [UIAuthorize]
+        [ValidateAntiForgeryToken]
+        public virtual async Task<JsonResult> RevokeApiKeyCredential(string credentialType, int? credentialKey)
+        {
+            var user = GetCurrentUser();
+
+            var cred = user.Credentials.SingleOrDefault(
+                c => string.Equals(c.Type, credentialType, StringComparison.OrdinalIgnoreCase)
+                    && CredentialKeyMatches(credentialKey, c));
+
+            if (cred == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Json(Strings.CredentialNotFound);
+            }
+
+            await AuthenticationService.RevokeApiKeyCredential(cred, CredentialRevocationSource.User);
+
+            var credViewModel = AuthenticationService.DescribeCredential(cred);
+
+            var emailMessage = new ApiKeyRevokedMessage(
+                _config,
+                user,
+                credViewModel.GetCredentialTypeInfo());
+            await MessageService.SendMessageAsync(emailMessage);
+
+            return Json(new ApiKeyViewModel(credViewModel));
         }
 
         [HttpPost]

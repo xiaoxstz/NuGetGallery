@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Data.Entity.Core.Objects;
 using Moq;
 using Xunit;
 
@@ -103,6 +102,8 @@ namespace NuGetGallery
             [InlineData("![image](https://www.asp.net/fake.jpg)", "<p><img src=\"https://www.asp.net/fake.jpg\" alt=\"image\" /></p>", false, false)]
             [InlineData("![image](http://www.otherurl.net/fake.jpg)", "<p><img src=\"https://www.otherurl.net/fake.jpg\" class=\"img-fluid\" alt=\"image\" /></p>", true, true)]
             [InlineData("![image](http://www.otherurl.net/fake.jpg)", "<p><img src=\"https://www.otherurl.net/fake.jpg\" alt=\"image\" /></p>", true, false)]
+            [InlineData("![](http://www.otherurl.net/fake.jpg)", "<p><img src=\"https://www.otherurl.net/fake.jpg\" alt=\"\" /></p>", true, false)]
+            [InlineData("![](http://www.otherurl.net/fake.jpg)", "<p><img src=\"https://www.otherurl.net/fake.jpg\" class=\"img-fluid\" alt=\"alternate text is missing from this package README image\" /></p>", true, true)]
             [InlineData("## License\n\tLicensed under the Apache License, Version 2.0 (the \"License\");", "<h3 id=\"license\">License</h3>\n<pre><code>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n</code></pre>", false, true)]
             [InlineData("## License\n\tLicensed under the Apache License, Version 2.0 (the \"License\");", "<h3 id=\"license\">License</h3>\n<pre><code>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n</code></pre>", false, true)]
             public void ConvertsMarkdownToHtml(string originalMd, string expectedHtml, bool imageRewriteExpected, bool isMarkdigMdRenderingEnabled)
@@ -115,12 +116,12 @@ namespace NuGetGallery
             }
 
             [Theory]
-            [InlineData(true, "<p><img src=\"https://api.bintray.com/example/image.svg\" class=\"img-fluid\" alt=\"image\" /></p>")]
-            [InlineData(false, "<p><img src=\"https://api.bintray.com/example/image.svg\" alt=\"image\" /></p>")]
+            [InlineData(true, "<p><img src=\"https://api.codacy.com/example/image.svg\" class=\"img-fluid\" alt=\"image\" /></p>")]
+            [InlineData(false, "<p><img src=\"https://api.codacy.com/example/image.svg\" alt=\"image\" /></p>")]
             public void ConvertsMarkdownToHtmlWithImageDisaplyed(bool isMarkdigMdRenderingEnabled, string expectedHtml)
             {
-                string imageUrl = "https://api.bintray.com/example/image.svg";
-                string originalMd = "![image](https://api.bintray.com/example/image.svg)";
+                string imageUrl = "https://api.codacy.com/example/image.svg";
+                string originalMd = "![image](https://api.codacy.com/example/image.svg)";
 
                 _featureFlagService.Setup(x => x.IsMarkdigMdRenderingEnabled()).Returns(isMarkdigMdRenderingEnabled);
                 _featureFlagService.Setup(x => x.IsImageAllowlistEnabled()).Returns(true);

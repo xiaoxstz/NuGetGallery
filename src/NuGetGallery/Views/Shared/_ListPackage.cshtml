@@ -36,14 +36,17 @@
         </div>
         <div class="col-sm-11">
             <div class="package-header">
-                <a class="package-title"
-                   href="@Url.Package(Model.Id, Model.UseVersion ? Model.Version : null).TrimEnd('/')"
-                   @if (itemIndex.HasValue)
-                   {
-                       @:data-track="@eventName" data-track-value="@itemIndex"
-                       @:data-package-id="@Model.Id" data-package-version="@Model.Version" data-use-version="@Model.UseVersion"
-                   }
-                   >@Html.BreakWord(Model.Id)</a>
+                <h2 class="package-title">
+                    <a class="package-title"
+                        href="@Url.Package(Model.Id, Model.UseVersion ? Model.Version : null).TrimEnd('/')"
+                        @if (itemIndex.HasValue)
+                        {
+                            @:data-track="@eventName" data-track-value="@itemIndex" data-click-source="PackageId"
+                            @:data-package-id="@Model.Id" data-package-version="@Model.Version" data-use-version="@Model.UseVersion"
+                        }>
+                            @Html.BreakWord(Model.Id)
+                    </a>
+                </h2>
 
                 @if (Model.IsVerified.HasValue && Model.IsVerified.Value)
                 {
@@ -66,13 +69,43 @@
                         by:
                         @foreach (var owner in Model.Owners)
                         {
-                            <a href="@Url.User(owner.Username)" title="View @owner.Username's profile">@owner.Username</a>
+                            <a href="@Url.User(owner.Username)" title="View @owner.Username's profile"
+                                @if (itemIndex.HasValue)
+                                {
+                                    @:data-track="@eventName" data-track-value="@itemIndex" data-click-source="Owner"
+                                    @:data-package-id="@Model.Id" data-package-version="@Model.Version" data-use-version="@Model.UseVersion"
+                                    @:data-owner="@owner.Username"
+                                }>
+                                    @owner.Username
+                            </a>
                         }
                     </span>
                 }
             </div>
 
             <ul class="package-list">
+                @if (Model.IsVulnerable || Model.IsDeprecated)
+                {
+                    <li class="package-warning-indicators">
+                        @if (Model.IsVulnerable)
+                        {
+                            <span class="icon-text package-warning--vulnerable" aria-label="@Model.VulnerabilityTitle" data-content="@Model.VulnerabilityTitle">
+                                <i class="ms-Icon ms-Icon--BlockedSiteSolid12" aria-hidden="true"></i>
+                                Vulnerable
+                            </span>
+                        }
+                        @if (Model.IsDeprecated)
+                        {
+                            <span class="icon-text package-warning--deprecated" aria-label="@Model.DeprecationTitle" data-content="@Model.DeprecationTitle">
+                                <i class="ms-Icon ms-Icon--ShieldAlert" aria-hidden="true"></i>
+                                Deprecated
+                            </span>
+                        }
+                    </li>
+                }
+                <li class="package-tfm-badges">
+                    @Html.Partial("../Packages/_SupportedFrameworksBadges", Model.FrameworkBadges, new ViewDataDictionary { { "itemIndex", itemIndex }, { "eventName", eventName } })
+                </li>
                 <li>
                     <span class="icon-text">
                         <i class="ms-Icon ms-Icon--Download" aria-hidden="true"></i>
@@ -126,7 +159,7 @@
                 @Model.ShortDescription
                 @if (Model.IsDescriptionTruncated)
                 {
-                    @Html.RouteLink("More information", RouteName.DisplayPackage, new { Model.Id, Model.Version })
+                    @Html.RouteLink("More information", RouteName.DisplayPackage, new { Model.Id, Model.Version }, new { @title = "More information about " + Model.Id + " package", @aria_label = "More information about " + Model.Id + " package" })
                 }
             </div>
         </div>

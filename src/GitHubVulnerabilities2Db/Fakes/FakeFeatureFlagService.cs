@@ -135,6 +135,11 @@ namespace GitHubVulnerabilities2Db.Fakes
             throw new NotImplementedException();
         }
 
+        public bool IsDisplayPackageReadmeWarningEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsODataDatabaseReadOnlyEnabled()
         {
             throw new NotImplementedException();
@@ -215,6 +220,11 @@ namespace GitHubVulnerabilities2Db.Fakes
             throw new NotImplementedException();
         }
 
+        public bool IsAllowAadContentSafetyReportsEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsPackageDependentsEnabled(User user)
         {
             throw new NotImplementedException();
@@ -291,6 +301,21 @@ namespace GitHubVulnerabilities2Db.Fakes
         }
 
         public bool IsNuGetAccountPasswordLoginEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsFrameworkFilteringEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDisplayTfmBadgesEnabled(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAdvancedFrameworkFilteringEnabled(User user)
         {
             throw new NotImplementedException();
         }

@@ -18,6 +18,10 @@ namespace NuGetGallery
 
         void TrackDownloadJsonRefreshDuration(TimeSpan duration);
 
+        void TrackDownloadJsonTotalPackageIds(int totalPackageIds);
+
+        void TrackDownloadJsonTotalPackageVersions(int totalPackageVersions);
+
         void TrackDownloadCountDecreasedDuringRefresh(string packageId, string packageVersion, long oldCount, long newCount);
 
         void TrackPackageDownloadCountDecreasedFromGallery(string packageId, string packageVersion, long galleryCount, long jsonCount);
@@ -55,7 +59,8 @@ namespace NuGetGallery
             PackageDeprecationStatus status,
             PackageRegistration alternateRegistration,
             Package alternatePackage,
-            bool hasCustomMessage);
+            bool hasCustomMessage,
+            bool hasChanges);
 
         void TrackPackageReadMeChangeEvent(Package package, string readMeSourceType, PackageEditReadMeState readMeState);
 

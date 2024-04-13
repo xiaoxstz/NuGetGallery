@@ -48,15 +48,20 @@ namespace NuGetGallery
         private const string MarkdigMdRenderingFlightName = GalleryPrefix + "MarkdigMdRendering";
         private const string MarkdigMdSyntaxHighlightFlightName = GalleryPrefix + "MarkdigMdSyntaxHighlight";
         private const string DisplayUploadWarningV2FlightName = GalleryPrefix + "DisplayUploadWarningV2";
+        private const string DisplayPackageReadmeWarningFlightName = GalleryPrefix + "DisplayPackageReadmeWarning";
         private const string DeletePackageApiFlightName = GalleryPrefix + "DeletePackageApi";
         private const string ImageAllowlistFlightName = GalleryPrefix + "ImageAllowlist";
         private const string DisplayBannerFlightName = GalleryPrefix + "Banner";
         private const string ShowReportAbuseSafetyChanges = GalleryPrefix + "ShowReportAbuseSafetyChanges";
+        private const string AllowAadContentSafetyReports = GalleryPrefix + "AllowAadContentSafetyReports";
         private const string DisplayTargetFrameworkFeatureName = GalleryPrefix + "DisplayTargetFramework";
         private const string ComputeTargetFrameworkFeatureName = GalleryPrefix + "ComputeTargetFramework";
         private const string RecentPackagesNoIndexFeatureName = GalleryPrefix + "RecentPackagesNoIndex";
         private const string NewAccount2FAEnforcementFeatureName = GalleryPrefix + "NewAccount2FAEnforcement";
         private const string NuGetAccountPasswordLoginFeatureName = GalleryPrefix + "NuGetAccountPasswordLogin";
+        private const string FrameworkFilteringFeatureName = GalleryPrefix + "FrameworkFiltering";
+        private const string DisplayTfmBadgesFeatureName = GalleryPrefix + "DisplayTfmBadges";
+        private const string AdvancedFrameworkFilteringFeatureName = GalleryPrefix + "AdvancedFrameworkFiltering";
 
         private const string ODataV1GetAllNonHijackedFeatureName = GalleryPrefix + "ODataV1GetAllNonHijacked";
         private const string ODataV1GetAllCountNonHijackedFeatureName = GalleryPrefix + "ODataV1GetAllCountNonHijacked";
@@ -332,6 +337,11 @@ namespace NuGetGallery
             return _client.IsEnabled(ShowReportAbuseSafetyChanges, defaultValue: false);
         }
 
+        public bool IsAllowAadContentSafetyReportsEnabled()
+        {
+            return _client.IsEnabled(AllowAadContentSafetyReports, defaultValue: false);
+        }
+
         public bool IsMarkdigMdRenderingEnabled()
         {
             return _client.IsEnabled(MarkdigMdRenderingFlightName, defaultValue: false);
@@ -345,6 +355,11 @@ namespace NuGetGallery
         public bool IsDisplayUploadWarningV2Enabled(User user)
         {
             return _client.IsEnabled(DisplayUploadWarningV2FlightName, user, defaultValue: false);
+        }
+
+        public bool IsDisplayPackageReadmeWarningEnabled(User user)
+        {
+            return _client.IsEnabled(DisplayPackageReadmeWarningFlightName, user, defaultValue: false);
         }
 
         public bool IsDeletePackageApiEnabled(User user)
@@ -385,6 +400,20 @@ namespace NuGetGallery
         public bool IsNuGetAccountPasswordLoginEnabled()
         {
             return _client.IsEnabled(NuGetAccountPasswordLoginFeatureName, defaultValue: true);
+        }
+
+        public bool IsFrameworkFilteringEnabled(User user) {
+            return _client.IsEnabled(FrameworkFilteringFeatureName, user, defaultValue: false);
+        }
+
+        public bool IsDisplayTfmBadgesEnabled(User user)
+        {
+            return _client.IsEnabled(DisplayTfmBadgesFeatureName, user, defaultValue: false);
+        }
+
+        public bool IsAdvancedFrameworkFilteringEnabled(User user)
+        {
+            return _client.IsEnabled(AdvancedFrameworkFilteringFeatureName, user, defaultValue: false);
         }
     }
 }
